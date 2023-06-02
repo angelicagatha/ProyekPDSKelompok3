@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2023 at 08:41 AM
+-- Generation Time: Jun 02, 2023 at 10:51 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -40,21 +40,50 @@ CREATE TABLE `admin` (
 --
 
 CREATE TABLE `buku` (
+  `cover` varchar(50) NOT NULL,
   `id_buku` int(11) NOT NULL,
   `nama_buku` varchar(100) NOT NULL,
   `penulis` varchar(100) NOT NULL,
   `penerbit` varchar(100) NOT NULL,
   `deskripsi` varchar(5000) NOT NULL,
   `tanggal_terbit` date NOT NULL,
-  `status` tinyint(1) NOT NULL
+  `status` tinyint(1) NOT NULL,
+  `idKategoriBuku` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `buku`
 --
 
-INSERT INTO `buku` (`id_buku`, `nama_buku`, `penulis`, `penerbit`, `deskripsi`, `tanggal_terbit`, `status`) VALUES
-(1, 'Harry Potter 1', 'J.K Rowling', 'Universal', 'buku bagusssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', '2004-06-16', 1);
+INSERT INTO `buku` (`cover`, `id_buku`, `nama_buku`, `penulis`, `penerbit`, `deskripsi`, `tanggal_terbit`, `status`, `idKategoriBuku`) VALUES
+('', 1, 'Harry Potter 1', 'J.K Rowling', 'Universal', 'buku bagusssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', '2004-06-16', 1, 6);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kategori`
+--
+
+CREATE TABLE `kategori` (
+  `id_kategori` int(11) NOT NULL,
+  `nama_kategori` varchar(1000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `kategori`
+--
+
+INSERT INTO `kategori` (`id_kategori`, `nama_kategori`) VALUES
+(1, 'sejarah'),
+(2, 'cerita anak'),
+(3, 'horror'),
+(4, 'komedi'),
+(5, 'thriller'),
+(6, 'misteri'),
+(7, 'edukasi'),
+(8, 'biografi'),
+(9, 'kamus'),
+(10, 'komik');
 
 -- --------------------------------------------------------
 
@@ -112,7 +141,14 @@ ALTER TABLE `admin`
 -- Indexes for table `buku`
 --
 ALTER TABLE `buku`
-  ADD PRIMARY KEY (`id_buku`);
+  ADD PRIMARY KEY (`id_buku`),
+  ADD KEY `kategori_buku` (`idKategoriBuku`);
+
+--
+-- Indexes for table `kategori`
+--
+ALTER TABLE `kategori`
+  ADD PRIMARY KEY (`id_kategori`);
 
 --
 -- Indexes for table `riwayat`
@@ -145,6 +181,12 @@ ALTER TABLE `buku`
   MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `kategori`
+--
+ALTER TABLE `kategori`
+  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `riwayat`
 --
 ALTER TABLE `riwayat`
@@ -159,6 +201,12 @@ ALTER TABLE `user`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `buku`
+--
+ALTER TABLE `buku`
+  ADD CONSTRAINT `kategori_buku` FOREIGN KEY (`idKategoriBuku`) REFERENCES `kategori` (`id_kategori`);
 
 --
 -- Constraints for table `riwayat`
