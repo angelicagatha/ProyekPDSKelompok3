@@ -2,6 +2,13 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="styles.css">
+        <style type="text/css">
+        .section {
+     margin: auto;
+     max-width: 500px;
+     text-align: center;
+}
+</style>
     </head>
     <body>
         <a href="https://front.codes/" class="logo" target="_blank">
