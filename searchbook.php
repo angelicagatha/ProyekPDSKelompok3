@@ -3,7 +3,7 @@
 session_start();
 
 if (isset($_SESSION['masuk'])) {
-    header("location: Homeuser.php");
+    header("location: homeuser.php");
 }
 
 require '../../../vendor/Predis/Predis/Autoload.php';
@@ -35,22 +35,22 @@ if (!$koneksi) {
     die("Gagal terhubung ke database: " . mysqli_connect_error());
 }
 
-function add_book($book_id, $book_data)
-{
-    global $koneksi;
+// function add_book($book_id, $book_data)
+// {
+//     global $koneksi;
 
-    $judul = $book_data['judul'];
-    $pengarang = $book_data['pengarang'];
-    $tahun = $book_data['tahun'];
+//     $judul = $book_data['judul'];
+//     $pengarang = $book_data['pengarang'];
+//     $tahun = $book_data['tahun'];
 
-    $query = "INSERT INTO buku (id_buku, nama_buku, penulis, penerbit, deskripsi, tanggal_terbit, status) VALUES ('$book_id', '$judul', '$pengarang', '$penerbit', '$deskripsi', '$tahun', '$status')";
+//     $query = "INSERT INTO buku (id_buku, nama_buku, penulis, penerbit, deskripsi, tanggal_terbit, status) VALUES ('$book_id', '$judul', '$pengarang', '$penerbit', '$deskripsi', '$tahun', '$status')";
 
-    if (mysqli_query($koneksi, $query)) {
-        echo "Buku berhasil ditambahkan ke database.";
-    } else {
-        echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
-    }
-}
+//     if (mysqli_query($koneksi, $query)) {
+//         echo "Buku berhasil ditambahkan ke database.";
+//     } else {
+//         echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
+//     }
+// }
 
 function search_book($keyword)
 {
@@ -66,20 +66,37 @@ function search_book($keyword)
         $matching_books = json_decode($cached_results, true);
     } else {
         // Jika data buku tidak ada di cache, lakukan pencarian ke database
-        $query = "SELECT * FROM buku WHERE nama_buku LIKE '%$keyword%'";
+        $query = "SELECT id_buku, cover_buku, nama_buku, penulis, penerbit, deskripsi, tanggal_terbit, status.keterangan_status, kategori.nama_kategori
+        FROM buku
+        INNER JOIN kategori ON kategori.id_kategori = buku.kategori
+        INNER JOIN status ON status.id_status = buku.status WHERE nama_buku LIKE '%$keyword%'";
 
         $result = mysqli_query($koneksi, $query);
 
-        $matching_books = [];
+        // $matching_books = [];
 
         if (mysqli_num_rows($result) > 0) {
+            echo '<div class="book-list">';
             while ($row = mysqli_fetch_assoc($result)) {
-                $matching_books[] = $row;
+                echo '<div class="book-card">';
+                    echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
+                    echo '<img src="../img/' . $row['cover_buku'] . '" alt="Cover Buku" class="book-cover">';
+                    echo '<h3 style="text-align: center;">' . $row['nama_buku'] . '</h3>';
+                    echo '<p style="text-align: center;">' . $row['penulis'] . '</p>';
+
+                    if ($row['keterangan_status'] == "Tersedia") {
+                      echo '<p style="text-align: right; color: green;">Status: [' . $row['keterangan_status'] . ']</p>';
+                    } else {
+                      echo '<p style="text-align: right; color: red;">Status: [' . $row['keterangan_status'] . ']</p>';
+                    }
+                    
+                    echo '</div>';
             }
+            echo '</div>';
         }
 
         // Simpan hasil pencarian ke cache Redis
-        $redis->set($cache_key, json_encode($matching_books));
+        $redis->set($cache_key, json_encode(mysqli_fetch_all($result, MYSQLI_ASSOC)));
     }
 
     return $matching_books;
