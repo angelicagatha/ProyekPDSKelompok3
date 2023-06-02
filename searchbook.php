@@ -52,8 +52,8 @@ function search_book($keyword)
 $book1_id = 'book:1';
 $book1_data = [
     'judul' => 'Harry Potter and the Philosopher\'s Stone',
-    'pengarang' => 'J.K. Rowling',
-    'tahun' => '1997',
+    // 'pengarang' => 'J.K. Rowling',
+    // 'tahun' => '1997',
 ];
 
 add_book($book1_id, $book1_data);
@@ -61,8 +61,8 @@ add_book($book1_id, $book1_data);
 $book2_id = 'book:2';
 $book2_data = [
     'judul' => 'The Lord of the Rings',
-    'pengarang' => 'J.R.R. Tolkien',
-    'tahun' => '1954',
+    // 'pengarang' => 'J.R.R. Tolkien',
+    // 'tahun' => '1954',
 ];
 
 add_book($book2_id, $book2_data);
@@ -96,8 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo "<h3>Hasil pencarian untuk keyword '{$keyword}':</h3>";
         foreach ($results as $book) {
             echo "<p>Judul: " . $book['judul'] . "</p>";
-            echo "<p>Pengarang: " . $book['pengarang'] . "</p>";
-            echo "<p>Tahun: " . $book['tahun'] . "</p>";
+            // echo "<p>Pengarang: " . $book['pengarang'] . "</p>";
+            // echo "<p>Tahun: " . $book['tahun'] . "</p>";
             echo "<hr>";
         }
     } elseif (isset($_GET['keyword'])) {
