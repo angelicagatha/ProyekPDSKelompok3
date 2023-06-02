@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     <?php
     if ($results) {
+        echo "<h3>==== Buku ini tersedia ==== </h3> ";
         echo "<h3>Hasil pencarian untuk keyword '{$keyword}':</h3>";
         foreach ($results as $book) {
             echo "<p>Judul: " . $book['judul'] . "</p>";
