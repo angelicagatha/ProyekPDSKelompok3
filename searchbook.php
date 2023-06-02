@@ -1,5 +1,11 @@
 <?php
 
+session_start();
+
+if (isset($_SESSION['masuk'])) {
+    header("location: Homeuser.php");
+}
+
 require '../../../vendor/Predis/Predis/Autoload.php';
 
 use Predis\Client;
@@ -15,57 +21,69 @@ $redis = new Client([
     'password' => $redis_password,
 ]);
 
+// Konfigurasi koneksi database
+$host = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'perpustakaan';
 
-// Fungsi untuk menambahkan buku ke Redis
-function add_book($book_id, $book_data)
-{
-    global $redis;
+// Buat koneksi
+$koneksi = mysqli_connect($host, $username, $password, $database);
 
-    // Tambahkan ID buku ke Set 'books:set'
-    $redis->sadd('books:set', $book_id);
-
-    // Tambahkan data buku ke Hash 'books:hash:{book_id}'
-    $redis->hmset('books:hash:' . $book_id, $book_data);
+// Periksa koneksi
+if (!$koneksi) {
+    die("Gagal terhubung ke database: " . mysqli_connect_error());
 }
 
-// Fungsi untuk mencari buku berdasarkan kata kunci
+function add_book($book_id, $book_data)
+{
+    global $koneksi;
+
+    $judul = $book_data['judul'];
+    $pengarang = $book_data['pengarang'];
+    $tahun = $book_data['tahun'];
+
+    $query = "INSERT INTO buku (id_buku, nama_buku, penulis, penerbit, deskripsi, tanggal_terbit, status) VALUES ('$book_id', '$judul', '$pengarang', '$penerbit', '$deskripsi', '$tahun', '$status')";
+
+    if (mysqli_query($koneksi, $query)) {
+        echo "Buku berhasil ditambahkan ke database.";
+    } else {
+        echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
+    }
+}
+
 function search_book($keyword)
 {
-    global $redis;
+    global $koneksi, $redis;
 
-    $matching_books = [];
-    $book_ids = $redis->smembers('books:set');
+    $cache_key = 'search:' . $keyword;
 
-    foreach ($book_ids as $book_id) {
-        $book_data = $redis->hgetall('books:hash:' . $book_id);
-        foreach ($book_data as $field => $value) {
-            if (stripos($value, $keyword) !== false) {
-                $matching_books[] = $book_data;
-                break;
+    // Cek apakah data buku sudah ada di cache Redis
+    $cached_results = $redis->get($cache_key);
+
+    if ($cached_results !== null) {
+        // Jika data buku ditemukan di cache, kembalikan hasil pencarian dari cache
+        $matching_books = json_decode($cached_results, true);
+    } else {
+        // Jika data buku tidak ada di cache, lakukan pencarian ke database
+        $query = "SELECT * FROM buku WHERE nama_buku LIKE '%$keyword%'";
+
+        $result = mysqli_query($koneksi, $query);
+
+        $matching_books = [];
+
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $matching_books[] = $row;
             }
         }
+
+        // Simpan hasil pencarian ke cache Redis
+        $redis->set($cache_key, json_encode($matching_books));
     }
 
     return $matching_books;
 }
-
-$book1_id = 'book:1';
-$book1_data = [
-    'judul' => 'Harry Potter and the Philosopher\'s Stone',
-    // 'pengarang' => 'J.K. Rowling',
-    // 'tahun' => '1997',
-];
-
-add_book($book1_id, $book1_data);
-
-$book2_id = 'book:2';
-$book2_data = [
-    'judul' => 'The Lord of the Rings',
-    // 'pengarang' => 'J.R.R. Tolkien',
-    // 'tahun' => '1954',
-];
-
-add_book($book2_id, $book2_data);
 
 $results = [];
 
@@ -79,10 +97,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <title>Pencarian Buku</title>
 </head>
+
 <body>
     <h1>Pencarian Buku</h1>
     <form action="" method="GET">
@@ -96,30 +116,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo "<h3>==== Buku ini tersedia ==== </h3> ";
         echo "<h3>Hasil pencarian untuk keyword '{$keyword}':</h3>";
         foreach ($results as $book) {
-            echo "<p>Judul: " . $book['judul'] . "</p>";
-            // echo "<p>Pengarang: " . $book['pengarang'] . "</p>";
-            // echo "<p>Tahun: " . $book['tahun'] . "</p>";
+            echo "<p>Judul: " . $book['nama_buku'] . "</p>";
+            echo "<p>Penulis: " . $book['penulis'] . "</p>";
+            echo "<p>Penerbit: " . $book['penerbit'] . "</p>";
+            echo "<p>Deskripsi: " . $book['deskripsi'] . "</p>";
+            echo "<p>Tahun/Tanggal/Bulan Terbit: " . $book['tanggal_terbit'] . "</p>";
+            echo "<p>Status: " . $book['status'] . "</p>";
             echo "<hr>";
         }
     } elseif (isset($_GET['keyword'])) {
         echo "<p>Tidak ditemukan buku yang sesuai dengan keyword tersebut.</p>";
     }
     ?>
-
-    <!-- <h2>Tambah Buku</h2>
-    <form action="" method="POST">
-        <label for="judul">Judul:</label>
-        <input type="text" name="judul" id="judul" required><br>
-
-        <label for="pengarang">Pengarang:</label>
-        <input type="text" name="pengarang" id="pengarang" required><br>
-
-        <label for="tahun">Tahun:</label>
-        <input type="text" name="tahun" id="tahun" required><br>
-
-        <button type="submit">Tambah</button>
-    </form> -->
+    
 </body>
-</html
 
-
+</html>
