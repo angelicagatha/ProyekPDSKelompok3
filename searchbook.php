@@ -80,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <title>Pencarian Buku</title>
 </head>
 <body>
