@@ -49,38 +49,38 @@
         }
 
         .book-list {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 20px;
-}
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          grid-gap: 20px;
+        }
 
-li {
-  float: left;
-}
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333;
+        }
 
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
+        li {
+          float: left;
+        }
 
-li a:hover:not(.active) {
-  background-color: #111;
-}
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+        }
 
-.active {
-  background-color: #04AA6D;
-}
+        li a:hover:not(.active) {
+          background-color: #111;
+        }
 
+        .active {
+          background-color: #04AA6D;
+        }
       </style>
   </head>
 
@@ -89,6 +89,7 @@ li a:hover:not(.active) {
       <li><a class="active" href="homeuser.php">Home</a></li>
       <li style="text-align: right;"><a href="logoutuser.php">Logout</a></li>
     </ul>
+    
     <h1 style="text-align: center;">List Buku Perpustakaan</h1>
     <?php
       include '../searchbook.php';
