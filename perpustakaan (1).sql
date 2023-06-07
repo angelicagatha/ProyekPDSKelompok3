@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 06, 2023 at 02:46 PM
+-- Generation Time: Jun 07, 2023 at 02:56 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -78,7 +78,7 @@ CREATE TABLE `kategori` (
 
 INSERT INTO `kategori` (`id_kategori`, `nama_kategori`) VALUES
 (1, 'sejarah'),
-(2, 'cerita anak'),
+(2, 'anak'),
 (3, 'horror'),
 (4, 'komedi'),
 (5, 'thriller'),
@@ -86,7 +86,9 @@ INSERT INTO `kategori` (`id_kategori`, `nama_kategori`) VALUES
 (7, 'edukasi'),
 (8, 'biografi'),
 (9, 'kamus'),
-(10, 'komik');
+(10, 'komik'),
+(11, 'novel'),
+(12, 'skripsi');
 
 -- --------------------------------------------------------
 
@@ -101,6 +103,25 @@ CREATE TABLE `riwayat` (
   `tanggal_pinjam` date NOT NULL,
   `tanggal_kembali` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `status`
+--
+
+CREATE TABLE `status` (
+  `id_status` int(11) NOT NULL,
+  `keterangan_status` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `status`
+--
+
+INSERT INTO `status` (`id_status`, `keterangan_status`) VALUES
+(0, 'Tidak Tersedia'),
+(1, 'Tersedia');
 
 -- --------------------------------------------------------
 
@@ -155,6 +176,12 @@ ALTER TABLE `riwayat`
   ADD KEY `idPinjamBuku` (`id_buku_pinjam`);
 
 --
+-- Indexes for table `status`
+--
+ALTER TABLE `status`
+  ADD PRIMARY KEY (`id_status`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -180,13 +207,19 @@ ALTER TABLE `books`
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `riwayat`
 --
 ALTER TABLE `riwayat`
   MODIFY `id_pinjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `status`
+--
+ALTER TABLE `status`
+  MODIFY `id_status` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user`
