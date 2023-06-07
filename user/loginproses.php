@@ -10,8 +10,12 @@
     $query = "SELECT * FROM user WHERE email = '$email' AND password = '$hashed_password'";
     $result = $conn->query($query);
 
+    foreach ($result as $hasil) {
+        $username = $hasil['nama_user'];
+    }
+
     if($result->num_rows>0){
-        $_SESSION['email'] = $email;
+        $_SESSION['nama_user'] = $username;
         header("location: homeuser.php");
     } else {
         echo "Username atau password salah";

@@ -1,10 +1,4 @@
 <?php
-    session_start();
-
-    if (isset($_SESSION['masuk'])) {
-        header("location: homeuser.php");
-    }
-
     require '../../../vendor/Predis/Predis/Autoload.php';
 
     use Predis\Client;

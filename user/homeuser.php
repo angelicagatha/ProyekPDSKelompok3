@@ -1,3 +1,16 @@
+<?php
+  require_once 'koneksi.php';
+
+  session_start();
+
+  if(!isset($_SESSION['nama_user'])){
+    header("location: loginuser.php");
+    exit;
+  }
+
+  $username = $_SESSION['nama_user'];
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -87,7 +100,8 @@
   <body>
     <ul>
       <li><a class="active" href="homeuser.php">Home</a></li>
-      <li style="text-align: right;"><a href="logoutuser.php">Logout</a></li>
+      <li><a href="logoutuser.php">Logout</a></li>
+      <li class="active" style="float:right"><a href="#">Welcome, <?php echo $_SESSION['nama_user'];?>!</a></li>
     </ul>
     
     <h1 style="text-align: center;">List Buku Perpustakaan</h1>
