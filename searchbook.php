@@ -62,14 +62,16 @@ function search_book($keyword)
     $cached_results = $redis->get($cache_key);
 
     if ($cached_results !== null) {
-        // Jika data buku ditemukan di cache, kembalikan hasil pencarian dari cache
-        $matching_books = json_decode($cached_results, true);
-    } else {
-        // Jika data buku tidak ada di cache, lakukan pencarian ke database
+    //     // Jika data buku ditemukan di cache, kembalikan hasil pencarian dari cache
+    //     $matching_books = json_decode($cached_results, true);
+    // } else {
+    //     // Jika data buku tidak ada di cache, lakukan pencarian ke database
         $query = "SELECT id_buku, cover_buku, nama_buku, penulis, penerbit, deskripsi, tanggal_terbit, status.keterangan_status, kategori.nama_kategori
         FROM buku
         INNER JOIN kategori ON kategori.id_kategori = buku.kategori
-        INNER JOIN status ON status.id_status = buku.status WHERE nama_buku LIKE '%$keyword%'";
+        INNER JOIN status ON status.id_status = buku.status
+        WHERE nama_buku
+        LIKE '%$keyword%'";
 
         $result = mysqli_query($koneksi, $query);
 
@@ -94,12 +96,9 @@ function search_book($keyword)
             }
             echo '</div>';
         }
-
-        // Simpan hasil pencarian ke cache Redis
         $redis->set($cache_key, json_encode(mysqli_fetch_all($result, MYSQLI_ASSOC)));
     }
-
-    return $matching_books;
+    // return $matching_books;
 }
 
 $results = [];
