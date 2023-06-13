@@ -106,16 +106,18 @@
     
     <h1 style="text-align: center;">List Buku Perpustakaan</h1>
     <?php
-      include '../searchbook.php';
+      include '../searchbook_vira.php';
     ?> 
       <div class="book-container">
+      <h2 style="text-align: center;">Buku yang Tersedia</h2>
           <?php
               require_once "koneksi.php";
 
               $query = "SELECT id_buku, cover_buku, nama_buku, penulis, penerbit, deskripsi, tanggal_terbit, status.keterangan_status, kategori.nama_kategori
                         FROM buku
                         INNER JOIN kategori ON kategori.id_kategori = buku.kategori
-                        INNER JOIN status ON status.id_status = buku.status";
+                        INNER JOIN status ON status.id_status = buku.status
+                        WHERE status = 1";
               $result = $conn->query($query);
 
               if ($result->num_rows>0) {
@@ -138,6 +140,37 @@
                 echo '</div>';
               }
           ?>
+      </div>
+      <div class="book-container">
+      <h2 style="text-align: center;">Buku sedang Dipinjam</h2>
+        <?php
+      $query = "SELECT id_buku, cover_buku, nama_buku, penulis, penerbit, deskripsi, tanggal_terbit, status.keterangan_status, kategori.nama_kategori
+                        FROM buku
+                        INNER JOIN kategori ON kategori.id_kategori = buku.kategori
+                        INNER JOIN status ON status.id_status = buku.status
+                        WHERE status = 0";
+              $result = $conn->query($query);
+
+              if ($result->num_rows>0) {
+                echo '<div class="book-list">';
+                while ($row = $result->fetch_assoc()) {
+                    echo '<div class="book-card">';
+                    echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
+                    echo '<img src="../img/' . $row['cover_buku'] . '" alt="Cover Buku" class="book-cover">';
+                    echo '<h3 style="text-align: center;">' . $row['nama_buku'] . '</h3>';
+                    echo '<p style="text-align: center;">' . $row['penulis'] . '</p>';
+
+                    if ($row['keterangan_status'] == "Tersedia") {
+                      echo '<p style="text-align: right; color: green;">Status: [' . $row['keterangan_status'] . ']</p>';
+                    } else {
+                      echo '<p style="text-align: right; color: red;">Status: [' . $row['keterangan_status'] . ']</p>';
+                    }
+                    
+                    echo '</div>';
+                }
+                echo '</div>';
+              }
+              ?>
       </div>
   </body>
 </html>
