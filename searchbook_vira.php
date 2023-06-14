@@ -1,12 +1,11 @@
 <?php
-
 // session_start();
 
 // if (isset($_SESSION['masuk'])) {
 //     header("location: homeuser.php");
 // }
 
-require '../../../vendor/Predis/Predis/Autoload.php';
+require '../../../../vendor/Predis/Predis/Autoload.php';
 
 use Predis\Client;
 
@@ -49,12 +48,13 @@ function search_book($keyword)
         $matching_books = json_decode($cached_results, true);
     } else {
         // Jika data buku tidak ada di cache, lakukan pencarian ke database
-        $query = "SELECT id_buku, cover_buku, nama_buku, penulis, penerbit, deskripsi, tanggal_terbit, status.keterangan_status, kategori.nama_kategori
-        FROM buku
-        INNER JOIN kategori ON kategori.id_kategori = buku.kategori
-        INNER JOIN status ON status.id_status = buku.status
-        WHERE nama_buku
-        LIKE '%$keyword%'";
+        $keyword = mysqli_real_escape_string($koneksi, $keyword);
+
+        $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, idKategoriBuku, nama_kategori
+        FROM books
+        INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
+        INNER JOIN status ON status.id_status = books.status
+        WHERE status = '1' AND (nama_buku LIKE '%$keyword%' OR penulis LIKE '%$keyword%')";
 
         $result = mysqli_query($koneksi, $query);
         $matching_books = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -98,14 +98,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             foreach ($results as $book) {
                 echo '<div class="book-card">';
                     echo '<p>Kategori: ' . $book['nama_kategori'] . '</p>';
-                    echo '<img src="../img/' . $book['cover_buku'] . '" alt="Cover Buku" class="book-cover">';
+                    echo '<img src="../img/' . $book['file_name'] . '" alt="Cover Buku" class="book-cover">';
                     echo '<h3 style="text-align: center;">' . $book['nama_buku'] . '</h3>';
                     echo '<p style="text-align: center;">' . $book['penulis'] . '</p>';
 
-                    if ($book['keterangan_status'] == "Tersedia") {
-                        echo '<p style="text-align: right; color: green;">Status: [' . $book['keterangan_status'] . ']</p>';
+                    if ($book['status_buku'] == "Tersedia") {
+                        echo '<p style="text-align: right; color: green;">Status: [' . $book['status_buku'] . ']</p>';
                     } else {
-                        echo '<p style="text-align: right; color: red;">Status: [' . $book['keterangan_status'] . ']</p>';
+                        echo '<p style="text-align: right; color: red;">Status: [' . $book['status_buku'] . ']</p>';
                     }    
                 echo '</div>';
             }
@@ -115,4 +115,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     ?>
             
     </body>
-    </html>
+</html>
