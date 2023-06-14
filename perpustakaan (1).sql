@@ -57,9 +57,20 @@ CREATE TABLE `books` (
 -- Dumping data for table `books`
 --
 
-INSERT INTO `books` (`id`, `file_name`, `uploaded_on`, `status`, `nama_buku`, `deskripsi`, `penulis`, `tanggal_terbit`, `penerbit`, `status_buku`, `idKategoriBuku`) VALUES
+INSERT INTO `books` (`id`, `file_name`, `uploaded_on`, `status`, `nama_buku`, `deskripsi`, `penulis`, `tanggal_terbit`, `penerbit`, `status_buku`, `idKategoriBuku`, `jumlah_peminjaman`) VALUES
 (5, '492187.jpg', '2023-06-06 16:45:50', '1', 'Harry Potter 1', 'Harry dan Ron masuk ke platform 9 3/4', 'J K rowling', '2018-07-13', 'universal', 0, 6),
-(6, '492187.jpg', '2023-06-06 19:17:14', '1', 'Harry Potter 3', 'waaw heri poter', 'J K rowling', '2023-05-31', 'universal', 0, 9);
+(6, '492187.jpg', '2023-06-06 19:17:14', '1', 'Harry Potter 3', 'waaw heri poter', 'J K rowling', '2023-05-31', 'universal', 0, 9),
+(7, 'coverskripsi.png', '2023-06-14 11:31:58', '1', 'Panduan Mengerjakan Skripsi', 'Belajar banyak hal untuk mempersiapkan skripsi terbaikmu', 'Yayasan Pendidikan Islam', '2017-06-21', 'Gramedia', '1', '7', '7'),
+(8, 'sejarah.jpg', '2020-04-08 16:34:36', '1', 'Atlas Sejarah Indonesia & Dunia', 'Untuk SD, SMP , SMA dan Umum', 'Kartika.D', '2023-07-12', 'Erlangga', '1', '7', '5'),
+(9, 'bukuanak.jpg', '2018-06-03 16:36:34', '1', 'Juz Amma', 'Untuk anak-anak ', 'Bambang Hadisucipto', '2020-03-02', 'Keira', '0', '2', '7'),
+(10, 'bukuyoga.jpg', '2019-12-04 16:38:38', '1', 'Yoga & Pilates', 'Belajar tahap dan langkah Yoga yang baik dan benar bersama dengan expert', 'Ririen Kartika ', '2019-03-01', 'DeepPublish', '1', '13', '4'),
+(11, 'bukusaham.jpg', '2018-01-01 16:43:11', '1', 'Analisis Saham dan Fundamental', 'Belajar saham? jangan asal-asalan', 'Desmond Wira', '2022-08-03', 'BukuKita', '0', '7', '5')
+
+
+
+
+
+
 
 -- --------------------------------------------------------
 
@@ -89,6 +100,7 @@ INSERT INTO `kategori` (`id_kategori`, `nama_kategori`) VALUES
 (10, 'komik'),
 (11, 'novel'),
 (12, 'skripsi');
+(13, 'olahraga');
 
 -- --------------------------------------------------------
 
@@ -204,7 +216,16 @@ ALTER TABLE `books`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+
+-- ADD kolom Jumlah_Peminjaman di tabel books 
+-- 
+ALTER TABLE `books`
+ADD COLUMN `jumlah_peminjaman` INT NOT NULL DEFAULT 0 AFTER `idKategoriBuku`;
+
+--
+
 -- AUTO_INCREMENT for table `kategori`
+
 --
 ALTER TABLE `kategori`
   MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
