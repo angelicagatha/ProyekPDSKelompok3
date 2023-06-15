@@ -5,7 +5,11 @@
 //     header("location: homeuser.php");
 // }
 
-require '../../../../vendor/Predis/Predis/Autoload.php';
+// path nya vira
+// require '../../../../vendor/Predis/Predis/Autoload.php';
+
+// path nya caca
+require '../../../vendor/Predis/Predis/Autoload.php';
 
 use Predis\Client;
 
@@ -24,7 +28,7 @@ $redis = new Client([
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$database = 'perpustakaan';
+$database = 'library';
 
 // Buat koneksi
 $koneksi = mysqli_connect($host, $username, $password, $database);
@@ -50,11 +54,11 @@ function search_book($keyword)
         // Jika data buku tidak ada di cache, lakukan pencarian ke database
         $keyword = mysqli_real_escape_string($koneksi, $keyword);
 
-        $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, idKategoriBuku, nama_kategori
-        FROM books
-        INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
-        INNER JOIN status ON status.id_status = books.status
-        WHERE status = '1' AND (nama_buku LIKE '%$keyword%' OR penulis LIKE '%$keyword%')";
+        $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, idKategoriBuku, nama_kategori, jumlah_peminjaman
+                FROM books
+                INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
+                INNER JOIN status ON status.id_status = books.status
+                WHERE status = '1' AND (nama_buku LIKE '%$keyword%' OR penulis LIKE '%$keyword%')";
 
         $result = mysqli_query($koneksi, $query);
         $matching_books = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -103,9 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     echo '<p style="text-align: center;">' . $book['penulis'] . '</p>';
 
                     if ($book['status_buku'] == "Tersedia") {
-                        echo '<p style="text-align: right; color: green;">Status: [' . $book['status_buku'] . ']</p>';
+                        echo '<p style="text-align: right; color: green;">Status: [Tersedia]</p>';
                     } else {
-                        echo '<p style="text-align: right; color: red;">Status: [' . $book['status_buku'] . ']</p>';
+                        echo '<p style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
                     }    
                 echo '</div>';
             }

@@ -105,111 +105,99 @@
     </ul>
     
     <h1 style="text-align: center;">List Buku Perpustakaan</h1>
-    <?php
-      include '../searchbook_vira.php';
-    ?> 
-  <div class="book-container">
-  <h2 style="text-align: center;">Buku Terlaris</h2>
-  <?php
-  require_once "koneksi.php";
-
-  $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, idKategoriBuku, nama_kategori, jumlah_peminjaman
-            FROM books
-            INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
-            INNER JOIN status ON status.id_status = books.status
-            ORDER BY jumlah_peminjaman DESC
-            LIMIT 5";
-  $result = $conn->query($query);
-
-  if ($result && $result->num_rows > 0) {
-    echo '<div class="book-list">';
-    while ($row = $result->fetch_assoc()) {
-      echo '<div class="book-card">';
-      echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
-      echo '<img src="../img/' . $row['file_name'] . '" alt="Cover Buku" class="book-cover">';
-      echo '<h3 class="book-title">' . $row['nama_buku'] . '</h3>';
-      echo '<p class="book-author">' . $row['penulis'] . '</p>';
-
-      if ($row['status_buku'] == 1) {
-        echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
-      } else {
-        echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
-      }
-
-      echo '</div>';
-    }
-    echo '</div>';
-  } else {
-    echo '<p>Tidak ada buku yang tersedia.</p>';
-  }
-  ?>
-</div>
+    <?php include '../searchbook.php'; ?> 
     
-      <div class="book-container">
-      <h2 style="text-align: center;">Buku yang Tersedia</h2>
-          <?php
-              require_once "koneksi.php";
+    <div class="book-container">
+      <h2 style="text-align: center;">Buku Terlaris</h2>
+      <?php
+        require_once "koneksi.php";
 
-              $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, idKategoriBuku, nama_kategori
-                        FROM books
-                        INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
-                        INNER JOIN status ON status.id_status = books.status
-                        WHERE status = '1'";
-              $result = $conn->query($query);
+        $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, idKategoriBuku, nama_kategori, jumlah_peminjaman
+                  FROM books
+                  INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
+                  INNER JOIN status ON status.id_status = books.status
+                  ORDER BY jumlah_peminjaman DESC
+                  LIMIT 5";
+        $result = $conn->query($query);
 
-              if ($result->num_rows > 0) {
-                echo '<div class="book-list">';
-                while ($row = $result->fetch_assoc()) {
-                    echo '<div class="book-card">';
-                    echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
-                    echo '<img src="../img/' . $row['file_name'] . '" alt="Cover Buku" class="book-cover">';
-                    echo '<h3 class="book-title">' . $row['nama_buku'] . '</h3>';
-                    echo '<p class="book-author">' . $row['penulis'] . '</p>';
-        
-                    if ($row['status_buku'] == 1) {
-                        echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
-                    } else {
-                        echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
-                    }
-        
-                    echo '</div>';
-                }
-                echo '</div>';
+        if ($result && $result->num_rows > 0) {
+          echo '<div class="book-list">';
+          while ($row = $result->fetch_assoc()) {
+            echo '<div class="book-card">';
+            echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
+            echo '<img src="../img/' . $row['file_name'] . '" alt="Cover Buku" class="book-cover">';
+            echo '<h3 class="book-title">' . $row['nama_buku'] . '</h3>';
+            echo '<p class="book-author">' . $row['penulis'] . '</p>';
+
+            if ($row['status_buku'] == 1) {
+              echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
             } else {
-                echo '<p>Tidak ada buku yang tersedia.</p>';
+              echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
             }
-            ?>
-      </div>
-      <div class="book-container">
-  <h2 style="text-align: center;">Buku sedang Dipinjam</h2>
-  <?php
-  $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, idKategoriBuku, nama_kategori
-           FROM books
-           INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
-           INNER JOIN status ON status.id_status = books.status
-           WHERE status = '1'";
-  $result = $conn->query($query);
 
-  if ($result->num_rows > 0) {
-    echo '<div class="book-list">';
-    while ($row = $result->fetch_assoc()) {
-      echo '<div class="book-card">';
-      echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
-      echo '<img src="../img/' . $row['file_name'] . '" alt="Cover Buku" class="book-cover">';
-      echo '<h3 style="text-align: center;">' . $row['nama_buku'] . '</h3>';
-      echo '<p style="text-align: center;">' . $row['penulis'] . '</p>';
+            echo '</div>';
+          }
+          echo '</div>';
+        } else {
+          echo '<p>Tidak ada buku yang tersedia.</p>';
+        }
+      ?>
+    </div>
+    
+    <div class="book-container">
+      <h2 style="text-align: center;">Buku yang Tersedia</h2>
+      <?php
+        require_once "koneksi.php";
 
-      if ($row['status_buku'] == "Tersedia") {
-        echo '<p style="text-align: right; color: green;">Status: [' . $row['status_buku'] . ']</p>';
-      } else {
-        echo '<p style="text-align: right; color: red;">Status: [' . $row['status_buku'] . ']</p>';
-      }
+        $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status.keterangan_status, kategori.nama_kategori
+                  FROM books
+                  INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
+                  INNER JOIN status ON status.id_status = books.status_buku
+                  WHERE status_buku = '1'";
+        $result = $conn->query($query);
 
-      echo '</div>';
-    }
-    echo '</div>';
-  }
-  ?>
-</div>
+        if ($result->num_rows > 0) {
+          echo '<div class="book-list">';
+          while ($row = $result->fetch_assoc()) {
+              echo '<div class="book-card">';
+                echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
+                echo '<img src="../img/' . $row['file_name'] . '" alt="Cover Buku" class="book-cover">';
+                echo '<h3 class="book-title">' . $row['nama_buku'] . '</h3>';
+                echo '<p class="book-author">' . $row['penulis'] . '</p>';
+                echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
+              echo '</div>';
+          }
+          echo '</div>';
+        } else {
+            echo '<p>Tidak ada buku yang tersedia.</p>';
+        }
+      ?>
+    </div>
+
+    <div class="book-container">
+      <h2 style="text-align: center;">Buku sedang Dipinjam</h2>
+      <?php
+        $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status.keterangan_status, kategori.nama_kategori
+                  FROM books
+                  INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
+                  INNER JOIN status ON status.id_status = books.status_buku
+                  WHERE status_buku = '0'";
+        $result = $conn->query($query);
+
+        if ($result->num_rows > 0) {
+          echo '<div class="book-list">';
+          while ($row = $result->fetch_assoc()) {
+            echo '<div class="book-card">';
+              echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
+              echo '<img src="../img/' . $row['file_name'] . '" alt="Cover Buku" class="book-cover">';
+              echo '<h3 style="text-align: center;">' . $row['nama_buku'] . '</h3>';
+              echo '<p style="text-align: center;">' . $row['penulis'] . '</p>';
+              echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
+            echo '</div>';
+          }
+          echo '</div>';
+        }
+      ?>
+    </div>
   </body>
 </html>
