@@ -1,3 +1,11 @@
+<?php
+    require_once "koneksi.php";
+
+    if (isset($_SESSION['user'])) {
+      header("location: homeuser.php");
+    }
+?>
+
 <!DOCTYPE html>
 <html>
     <head>

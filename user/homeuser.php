@@ -95,18 +95,32 @@
           background-color: #04AA6D;
         }
       </style>
+
+      <script>
+        function addToCart(idBuku) {
+            var xmlhttp = new XMLHttpRequest();
+            var quantity = 1;
+            var idUser = <?php echo $_SESSION['user'];?>;
+
+            xmlhttp.open("GET", "ajax/addToCart.php?idUser=" + idUser + "&quantity=" + quantity + "&idBuku=" + idBuku, true);
+            xmlhttp.send();
+
+            alert("Added to Cart SUCCESSFULY");
+        }
+      </script>
   </head>
 
   <body>
     <ul>
       <li><a class="active" href="homeuser.php">Home</a></li>
+      <li><a href="cart.php?idUser=<?php echo $_SESSION['user'] ?>">Cart</a></li>
       <li><a href="logoutuser.php">Logout</a></li>
       <li class="active" style="float:right"><a href="#">Welcome, <?php echo $_SESSION['nama_user'];?>!</a></li>
     </ul>
     
     <h1 style="text-align: center;">List Buku Perpustakaan</h1>
     <?php include '../searchbook.php'; ?> 
-    
+
     <div class="book-container">
       <h2 style="text-align: center;">Buku Terlaris</h2>
       <?php
@@ -135,6 +149,11 @@
               echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
             }
 
+            echo '<div class="card-footer d-flex justify-content-between bg-light border">
+                    <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $row['id'] . ')">
+                      <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
+                    </a>
+                  </div>';
             echo '</div>';
           }
           echo '</div>';
