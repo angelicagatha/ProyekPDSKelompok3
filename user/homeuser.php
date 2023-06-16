@@ -135,15 +135,16 @@
 
             if ($row['status_buku'] == 1) {
               echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
-            } else {
-              echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
-            }
-
-            echo '<div class="card-footer d-flex justify-content-between bg-light border">
+              echo '<div class="card-footer d-flex justify-content-between bg-light border">
                     <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $row['id'] . ')">
                       <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
                     </a>
                   </div>';
+            } else {
+              echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
+            }
+
+            
             echo '</div>';
           }
           echo '</div>';
@@ -207,11 +208,6 @@
               echo '<h3 style="text-align: center;">' . $row['nama_buku'] . '</h3>';
               echo '<p style="text-align: center;">' . $row['penulis'] . '</p>';
               echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
-              echo '<div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $row['id'] . ')">
-                <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
-              </a>
-            </div>';
               echo '</div>';
           }
           echo '</div>';

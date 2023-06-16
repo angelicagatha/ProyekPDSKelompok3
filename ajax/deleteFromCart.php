@@ -4,9 +4,9 @@
     $idUser = $_GET['idUser'];
     $idBarang = $_GET['idBuku'];
 
-    $sql = "DELETE FROM cart 
-            WHERE idUser = ".$idUser." AND idBuku = ".$idBuku;
-    $conn->query($sql);
-    
-    $link = null;
+    $sql = "DELETE FROM cart WHERE idUser = ? AND idBuku = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $idUser, $idBuku);
+    $stmt->execute();
+    $result = $stmt->get_result();
 ?>

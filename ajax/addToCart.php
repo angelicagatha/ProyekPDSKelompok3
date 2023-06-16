@@ -13,10 +13,9 @@
 
     if(mysqli_num_rows($result)>0){
         while($row = $result->fetch_assoc()){
-                $updateQuery = "UPDATE cart
-                SET quantity = quantity + ".$quantity." WHERE idUser = ".$row['idUser']." AND idBuku = ".$row['idBuku'];
-                $stmt1 = $conn-> prepare($updateQuery);
-                $stmt1->execute();
+            $updateQuery = "UPDATE cart SET quantity = quantity + ".$quantity." WHERE idUser = ".$row['idUser']." AND idBuku = ".$row['idBuku'];
+            $stmt1 = $conn-> prepare($updateQuery);
+            $stmt1->execute();
         }        
     }else{
         $insertQuery = "INSERT INTO cart(idUser, idBuku, quantity) VALUES (?,?,?)";

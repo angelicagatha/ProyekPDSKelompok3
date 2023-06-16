@@ -144,14 +144,11 @@
             <div class="card-header">
                 <div class="form-check">
                     <div class="row">
-                        <div class="col-sm-4 col-md-4 col-lg-4">
+                        <div class="col-sm-5 col-md-5 col-lg-5">
                             Product
                         </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
+                        <div class="col-sm-3 col-md-3 col-lg-3">
                             Quantity
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            Total Buku
                         </div>
                     </div>
                 </div>
@@ -173,17 +170,14 @@
                 <div class="card-body">
                     <div class="form-check">
                         <div class="row">
-                            <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="col-sm-5 col-md-5 col-lg-5">
                                 <img src="<?php echo $barang['file_name'] ?>" style="width: 80px">
-                                <?php echo $barang['nama_buku'] ?>
-                            </div>
-                            <div class="col-sm-2 col-md-2 col-lg-2">
                                 <?php
-                                    echo $it['quantity'];
-                                    $totalQuantity += $it['quantity'];
+                                    echo $barang['nama_buku'];
+                                    $totalBuku += 1
                                 ?>
                             </div>
-                            <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
                                 <?php
                                     echo $it['quantity'];
                                     $totalQuantity += $it['quantity'];
@@ -201,8 +195,8 @@
         <br>
         <div class="card" style="border-color: black; text-align: center;">
             <div class="card-footer">
-                <p>Total (<?php echo $totalQuantity; ?> Buku):
-                    <h5><?php echo $totalBuku ?> Buku
+                <p>Total (<?php echo $totalBuku; ?> Buku):
+                    <h5><?php echo $totalQuantity ?> Buku
                         <button class="btn btn-info" onclick="location.href = '#'">Checkout</button>
                     </h5>
                 </p>
@@ -217,11 +211,11 @@
         <script src="js/bootstrap.js"></script>
 
         <script>
-            function deleteACart(idBarang) {
+            function deleteACart(idBuku) {
                 var xmlhttp = new XMLHttpRequest();
-                var idUser = <?php echo $_SESSION['user']; ?>;
+                var idUser = <?php echo $_SESSION['id_user']; ?>;
 
-                xmlhttp.open("GET", "ajax/deleteFromCart.php?idUser=" + idUser + "&idBarang=" + idBarang, true);
+                xmlhttp.open("GET", "ajax/deleteFromCart.php?idUser=" + idUser + "&idBuku=" + idBuku, true);
                 xmlhttp.send();
 
                 alert("Deleted from Cart SUCCESSFULY");
