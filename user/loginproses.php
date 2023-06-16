@@ -20,8 +20,11 @@
         $_SESSION['id_user'] = $id_user;
         header("location: homeuser.php");
     } else {
-        echo "Username atau password salah";
+        echo '<script>
+                alert("Username atau password salah");
+                window.location.href = "loginuser.php";
+            </script>';
     }
-
+    
     $conn->close();
 ?>

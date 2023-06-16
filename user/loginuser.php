@@ -49,7 +49,7 @@
                                                         <i class="input-icon uil uil-lock-alt"></i>
                                                     </div>
                                                     <button class="btn mt-4" type="submit">SUBMIT</button>
-                                                    <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
+                                                    <p class="mb-0 mt-4 text-center"><a href="forgotpassword.php" class="link">Forgot your password?</a></p>
                                                 </form>
                                             </div>
                                         </div>
