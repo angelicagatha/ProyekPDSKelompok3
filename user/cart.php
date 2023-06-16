@@ -163,9 +163,9 @@
             $totalBuku = 0;
             $totalQuantity = 0;
             foreach ($items as $it) {
-            $sql2 = "SELECT * FROM books WHERE id=" . $it['idBuku'];
-            $result2 = $conn->query($sql2);
-            $barang = $result2->fetch_assoc();
+                $sql2 = "SELECT * FROM books WHERE id=" . $it['idBuku'];
+                $result2 = $conn->query($sql2);
+                $barang = $result2->fetch_assoc();
         ?>
 
         <br>

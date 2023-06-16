@@ -15,7 +15,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <title>List Buku Perpustakaan</title>
+      <title>Home</title>
       <style>
         .book-card {
           width: 300px;
@@ -97,18 +97,7 @@
         }
       </style>
 
-      <script>
-        function addToCart(idBuku) {
-            var xmlhttp = new XMLHttpRequest();
-            var quantity = 1;
-            var idUser = <?php echo $_SESSION['id_user'];?>;
-
-            xmlhttp.open("GET", "ajax/addToCart.php?idUser=" + idUser + "&quantity=" + quantity + "&idBuku=" + idBuku, true);
-            xmlhttp.send();
-
-            alert("Added to Cart SUCCESSFULY");
-        }
-      </script>
+      
   </head>
 
   <body>
@@ -229,5 +218,17 @@
         }
       ?>
     </div>
+    <script>
+        function addToCart(idBuku) {
+            var xmlhttp = new XMLHttpRequest();
+            var quantity = 1;
+            var idUser = <?php echo $_SESSION['id_user'];?>;
+
+            xmlhttp.open("GET", "ajax/addToCart.php?idUser=" + idUser + "&quantity=" + quantity + "&idBuku=" + idBuku, true);
+            xmlhttp.send();
+
+            alert("Added to Cart SUCCESSFULY");
+        }
+      </script>
   </body>
 </html>
