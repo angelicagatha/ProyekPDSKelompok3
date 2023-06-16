@@ -12,10 +12,12 @@
 
     foreach ($result as $hasil) {
         $username = $hasil['nama_user'];
+        $id_user = $hasil['id_user'];
     }
 
     if($result->num_rows>0){
         $_SESSION['nama_user'] = $username;
+        $_SESSION['id_user'] = $id_user;
         header("location: homeuser.php");
     } else {
         echo "Username atau password salah";

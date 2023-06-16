@@ -3,7 +3,7 @@
     
     session_start();
 
-    if (!isset($_SESSION['user'])) {
+    if (!isset($_SESSION['id_user'])) {
         header("location: loginuser.php");
     }
 
@@ -126,14 +126,14 @@
         <?php
             $sql1 = "SELECT *
                     FROM user
-                    WHERE id_user=" . $_SESSION['user'];
+                    WHERE id_user=" . $_SESSION['id_user'];
             $result1 = $conn->query($sql1);
             $result = $result1->fetch_assoc();
         ?>
 
         <ul>
-        <li><a class="active" href="homeuser.php">Home</a></li>
-        <li><a href="cart.php?idUser=<?php echo $_SESSION['user'] ?>">Cart</a></li>
+        <li><a href="homeuser.php">Home</a></li>
+        <li><a class="active" href="cart.php?idUser=<?php echo $id_user ?>">Cart</a></li>
         <li><a href="logoutuser.php">Logout</a></li>
         <li class="active" style="float:right"><a href="#">Welcome, <?php echo $_SESSION['nama_user'];?>!</a></li>
         </ul>

@@ -4,11 +4,12 @@
   session_start();
 
   if(!isset($_SESSION['nama_user'])){
+
     header("location: loginuser.php");
     exit;
   }
-
   $username = $_SESSION['nama_user'];
+  $id_user = $_SESSION['id_user'];
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +101,7 @@
         function addToCart(idBuku) {
             var xmlhttp = new XMLHttpRequest();
             var quantity = 1;
-            var idUser = <?php echo $_SESSION['user'];?>;
+            var idUser = <?php echo $_SESSION['id_user'];?>;
 
             xmlhttp.open("GET", "ajax/addToCart.php?idUser=" + idUser + "&quantity=" + quantity + "&idBuku=" + idBuku, true);
             xmlhttp.send();
@@ -113,9 +114,9 @@
   <body>
     <ul>
       <li><a class="active" href="homeuser.php">Home</a></li>
-      <li><a href="cart.php?idUser=<?php echo $_SESSION['user'] ?>">Cart</a></li>
+      <li><a href="cart.php?idUser=<?php echo $id_user ?>">Cart</a></li>
       <li><a href="logoutuser.php">Logout</a></li>
-      <li class="active" style="float:right"><a href="#">Welcome, <?php echo $_SESSION['nama_user'];?>!</a></li>
+      <li class="active" style="float:right"><a href="#">Welcome, <?php echo $username?>!</a></li>
     </ul>
     
     <h1 style="text-align: center;">List Buku Perpustakaan</h1>
@@ -184,7 +185,12 @@
                 echo '<h3 class="book-title">' . $row['nama_buku'] . '</h3>';
                 echo '<p class="book-author">' . $row['penulis'] . '</p>';
                 echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
-              echo '</div>';
+                echo '<div class="card-footer d-flex justify-content-between bg-light border">
+                <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $row['id'] . ')">
+                  <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
+                </a>
+              </div>';
+                echo '</div>';
           }
           echo '</div>';
         } else {
@@ -212,7 +218,12 @@
               echo '<h3 style="text-align: center;">' . $row['nama_buku'] . '</h3>';
               echo '<p style="text-align: center;">' . $row['penulis'] . '</p>';
               echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
-            echo '</div>';
+              echo '<div class="card-footer d-flex justify-content-between bg-light border">
+              <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $row['id'] . ')">
+                <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
+              </a>
+            </div>';
+              echo '</div>';
           }
           echo '</div>';
         }
