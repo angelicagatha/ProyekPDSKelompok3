@@ -11,7 +11,7 @@
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if(mysqli_num_rows($result)>0){
+    if(mysqli_num_rows($result) > 0){
         while($row = $result->fetch_assoc()){
             $updateQuery = "UPDATE cart SET quantity = quantity + ".$quantity." WHERE idUser = ".$row['idUser']." AND idBuku = ".$row['idBuku'];
             $stmt1 = $conn-> prepare($updateQuery);
@@ -20,9 +20,8 @@
     }else{
         $insertQuery = "INSERT INTO cart(idUser, idBuku, quantity) VALUES (?,?,?)";
         $stmt2 = $conn->prepare($insertQuery);
-        $qty = 0;
+        $qty = 1;
         $stmt2->bind_param("iii", $idUser,$idBuku, $qty);
         $stmt2->execute();
     }
-
 ?>

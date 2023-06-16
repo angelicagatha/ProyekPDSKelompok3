@@ -96,8 +96,6 @@
           background-color: #04AA6D;
         }
       </style>
-
-      
   </head>
 
   <body>
@@ -125,32 +123,35 @@
         $result = $conn->query($query);
 
         if ($result && $result->num_rows > 0) {
+          $rows = array();
+          while($row = $result->fetch_assoc()){
+            $rows[] = $row;
+          }
+        }
+        
           echo '<div class="book-list">';
-          while ($row = $result->fetch_assoc()) {
+          for ($i = 0; $i < count($rows); $i++) {
+            $currentRow = $rows[$i];
             echo '<div class="book-card">';
-            echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
-            echo '<img src="../img/' . $row['file_name'] . '" alt="Cover Buku" class="book-cover">';
-            echo '<h3 class="book-title">' . $row['nama_buku'] . '</h3>';
-            echo '<p class="book-author">' . $row['penulis'] . '</p>';
+            echo '<p>Kategori: ' . $currentRow['nama_kategori'] . '</p>';
+            echo '<img src="../img/' . $currentRow['file_name'] . '" alt="Cover Buku" class="book-cover">';
+            echo '<h3 class="book-title">' . $currentRow['nama_buku'] . '</h3>';
+            echo '<p class="book-author">' . $currentRow['penulis'] . '</p>';
 
-            if ($row['status_buku'] == 1) {
+            if ($currentRow['status_buku'] == 1) {
               echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
-              echo '<div class="card-footer d-flex justify-content-between bg-light border">
-                    <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $row['id'] . ')">
-                      <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
-                    </a>
-                  </div>';
+              
+                echo '<div class="card-footer d-flex justify-content-between bg-light border">
+                        <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $currentRow['id'] . ')">
+                          <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
+                        </a>
+                      </div>';
             } else {
               echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
             }
-
-            
             echo '</div>';
-          }
-          echo '</div>';
-        } else {
-          echo '<p>Tidak ada buku yang tersedia.</p>';
         }
+          echo '</div>';
       ?>
     </div>
     
@@ -167,25 +168,29 @@
         $result = $conn->query($query);
 
         if ($result->num_rows > 0) {
+          $rows = array();
+          while($row = $result->fetch_assoc()){
+            $rows[] = $row;
+          }
+        }
+
           echo '<div class="book-list">';
-          while ($row = $result->fetch_assoc()) {
+          for ($i = 0; $i < count($rows); $i++) {
+            $currentRow = $rows[$i];
               echo '<div class="book-card">';
-                echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
-                echo '<img src="../img/' . $row['file_name'] . '" alt="Cover Buku" class="book-cover">';
-                echo '<h3 class="book-title">' . $row['nama_buku'] . '</h3>';
-                echo '<p class="book-author">' . $row['penulis'] . '</p>';
+                echo '<p>Kategori: ' . $currentRow['nama_kategori'] . '</p>';
+                echo '<img src="../img/' . $currentRow['file_name'] . '" alt="Cover Buku" class="book-cover">';
+                echo '<h3 class="book-title">' . $currentRow['nama_buku'] . '</h3>';
+                echo '<p class="book-author">' . $currentRow['penulis'] . '</p>';
                 echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
-                echo '<div class="card-footer d-flex justify-content-between bg-light border">
-                <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $row['id'] . ')">
-                  <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
-                </a>
-              </div>';
+                  echo '<div class="card-footer d-flex justify-content-between bg-light border">
+                          <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $currentRow['id'] . ')">
+                            <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
+                          </a>
+                        </div>';
                 echo '</div>';
           }
           echo '</div>';
-        } else {
-            echo '<p>Tidak ada buku yang tersedia.</p>';
-        }
       ?>
     </div>
 
@@ -214,17 +219,18 @@
         }
       ?>
     </div>
+
     <script>
         function addToCart(idBuku) {
-            var xmlhttp = new XMLHttpRequest();
             var quantity = 1;
             var idUser = <?php echo $_SESSION['id_user'];?>;
+            var url = "http://localhost/PDS/ProyekPDSKelompok3/ajax/addToCart.php?idUser=" + idUser + "&quantity=" + quantity + "&idBuku=" + idBuku;
 
-            xmlhttp.open("GET", "ajax/addToCart.php?idUser=" + idUser + "&quantity=" + quantity + "&idBuku=" + idBuku, true);
-            xmlhttp.send();
+            window.location.href = url;
 
             alert("Added to Cart SUCCESSFULY");
         }
       </script>
+
   </body>
 </html>

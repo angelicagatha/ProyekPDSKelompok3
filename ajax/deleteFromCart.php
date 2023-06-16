@@ -2,7 +2,7 @@
     require_once "../user/koneksi.php";
 
     $idUser = $_GET['idUser'];
-    $idBarang = $_GET['idBuku'];
+    $idBuku = $_GET['idBuku'];
 
     $sql = "DELETE FROM cart WHERE idUser = ? AND idBuku = ?";
     $stmt = $conn->prepare($sql);

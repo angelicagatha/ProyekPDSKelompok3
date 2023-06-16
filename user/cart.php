@@ -7,7 +7,8 @@
         header("location: loginuser.php");
     }
 
-    $sql = "SELECT * FROM cart WHERE idUser=" . $_GET['idUser'];
+    $id_user = $_SESSION['id_user'];
+    $sql = "SELECT * FROM cart WHERE idUser=$id_user";
     $result = $conn->query($sql);
     $items = $result->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -159,10 +160,10 @@
         <?php
             $totalBuku = 0;
             $totalQuantity = 0;
-            foreach ($items as $it) {
-                $sql2 = "SELECT * FROM books WHERE id=" . $it['idBuku'];
+            foreach ($items as $punyaBuku) {
+                $sql2 = "SELECT * FROM books WHERE id=" . $punyaBuku['idBuku'];
                 $result2 = $conn->query($sql2);
-                $barang = $result2->fetch_assoc();
+                $books = $result2->fetch_assoc();
         ?>
 
         <br>
@@ -171,20 +172,20 @@
                     <div class="form-check">
                         <div class="row">
                             <div class="col-sm-5 col-md-5 col-lg-5">
-                                <img src="<?php echo $barang['file_name'] ?>" style="width: 80px">
+                                <img src="../img/<?php echo $books['file_name'] ?>" style="width: 80px">
                                 <?php
-                                    echo $barang['nama_buku'];
+                                    echo $books['nama_buku'];
                                     $totalBuku += 1
                                 ?>
                             </div>
                             <div class="col-sm-3 col-md-3 col-lg-3">
                                 <?php
-                                    echo $it['quantity'];
-                                    $totalQuantity += $it['quantity'];
+                                    echo $punyaBuku['quantity'];
+                                    $totalQuantity += $punyaBuku['quantity'];
                                 ?>
                             </div>
                             <div class="col-sm-2 col-md-2 col-lg-2">
-                                <button class="btn btn-danger" onclick="deleteACart(<?php echo $it['idBuku']; ?>)">Delete</button>
+                                <button class="btn btn-danger" onclick="deleteACart('<?php echo $punyaBuku['idBuku']; ?>')">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -195,7 +196,7 @@
         <br>
         <div class="card" style="border-color: black; text-align: center;">
             <div class="card-footer">
-                <p>Total (<?php echo $totalBuku; ?> Buku):
+                <p>Total (<?php echo $totalBuku; ?> Jenis Buku):
                     <h5><?php echo $totalQuantity ?> Buku
                         <button class="btn btn-info" onclick="location.href = '#'">Checkout</button>
                     </h5>
@@ -212,14 +213,13 @@
 
         <script>
             function deleteACart(idBuku) {
-                var xmlhttp = new XMLHttpRequest();
                 var idUser = <?php echo $_SESSION['id_user']; ?>;
+                var url = "http://localhost/PDS/ProyekPDSKelompok3/ajax/deleteFromCart.php?idUser=" + idUser + "&idBuku=" + idBuku;
 
-                xmlhttp.open("GET", "ajax/deleteFromCart.php?idUser=" + idUser + "&idBuku=" + idBuku, true);
-                xmlhttp.send();
+                window.location.href = url;
 
                 alert("Deleted from Cart SUCCESSFULY");
-                location.reload()
+                location.reload();
             }
         </script>
     </body>
