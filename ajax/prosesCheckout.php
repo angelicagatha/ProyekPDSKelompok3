@@ -6,7 +6,7 @@
     $idUser = $_GET['idUser'];
     $tanggal_pinjam = date('Y-m-d');
 
-    $sql = "SELECT * FROM cart WHERE idUser = ?";
+    $sql = "SELECT * FROM cart right JOIN books ON books.id = cart.idBuku WHERE idUser = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $idUser);
     $stmt->execute();
@@ -23,9 +23,11 @@
             $stmt3->bind_param("i", $idUser);
             $stmt3->execute();
 
-            $sql4 = "UPDATE books SET status_buku = 0 WHERE id = ?";
+            $jumlah_peminjaman = $row['jumlah_peminjaman'] + 1;
+
+            $sql4 = "UPDATE books SET status_buku = 0, jumlah_peminjaman = ? WHERE id = ?";
             $stmt4 = $conn->prepare($sql4);
-            $stmt4->bind_param("i", $row['idBuku']);
+            $stmt4->bind_param("ii", $jumlah_peminjaman, $row['idBuku']);
             $stmt4->execute();
             
             echo "berhasil menambahkan";

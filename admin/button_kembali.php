@@ -18,4 +18,6 @@
         $row = $result->fetch_assoc();
         $tanggal_kembali = $row['tanggal_kembali'];
     }
+
+    header("location: riwayat.php");
 ?>

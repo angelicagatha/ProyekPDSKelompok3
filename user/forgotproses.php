@@ -13,21 +13,17 @@
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $hashed_password = $row['password'];
+ 
+            if($new_password == $confirm_new_password){
+                $hashed_password = md5($new_password);
 
-            if (md5($old_password) === $hashed_password) {    
-                if($new_password == $confirm_new_password){
-                    $hashed_password = md5($new_password);
-
-                    $query = "UPDATE user SET password = '$hashed_password' WHERE email='$email'";
-                    $conn->query($query);
-                    
-                    header('location: loginuser.php');
-                    exit;
-                } else {
-                    echo 'New Password dan Confirm New Password tidak cocok';
-                }
+                $query = "UPDATE user SET password = '$hashed_password' WHERE email='$email'";
+                $conn->query($query);
+                
+                header('location: loginuser.php');
+                exit;
             } else {
-                echo 'Password lama yang dimasukkan salah';
+                echo 'New Password dan Confirm New Password tidak cocok';
             }
         } else {
             echo 'Email tidak terdaftar';

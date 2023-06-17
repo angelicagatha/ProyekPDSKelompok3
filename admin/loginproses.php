@@ -20,7 +20,10 @@
         $_SESSION['id_admin'] = $id_user;
         header("location: homeadmin.php");
     } else {
-        echo "Username atau password salah";
+        echo '<script>
+                alert("Username atau password salah");
+                window.location.href = "loginadmin.php";
+            </script>';
     }
 
     $conn->close();

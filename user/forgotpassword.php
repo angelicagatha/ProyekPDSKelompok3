@@ -33,10 +33,6 @@
                                                         <input type="email" name="email" class="form-style" placeholder="Your Email" id="email" >
                                                         <i class="input-icon uil uil-at"></i>
                                                     </div>	
-                                                    <div class="form-group" for="old_password">
-                                                        <input type="password" name="old_password" class="form-style" placeholder="Old Password" id="old_password" >
-                                                        <i class="input-icon uil uil-at"></i>
-                                                    </div>	
                                                     <div class="form-group mt-2" for="new_password">
                                                         <input type="password" name="new_password" class="form-style" placeholder="New Password" id="new_password">
                                                         <i class="input-icon uil uil-lock-alt"></i>

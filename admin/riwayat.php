@@ -131,7 +131,7 @@
         <ul>
             <li><a href="homeadmin.php">Home</a></li>
             <li><a class="active" href="riwayat.php">Riwayat</a></li>
-            <li><a href="logoutuser.php">Logout</a></li>
+            <li><a href="logoutadmin.php">Logout</a></li>
             <li class="active" style="float:right"><a href="#">Welcome, <?php echo $email_admin?>!</a></li>
         </ul>
 
@@ -155,7 +155,9 @@
         </div>
 
         <?php
-            $sql2 = "SELECT * FROM books";
+            $sql2 = "SELECT * FROM books
+                      LEFT JOIN riwayat ON riwayat.id_buku_pinjam = books.id
+                      LEFT JOIN user ON user.id_user = riwayat.id_user_pinjam";
             $result2 = $conn->query($sql2);
             while($row = $result2->fetch_assoc()) {
         ?>
@@ -211,39 +213,16 @@
                             <div class="form-check">
                               <div class="row">
                                 <div class="col-sm-2 col-md-2 col-lg-2">
-                                      1
+                                  <?php echo $row['id_user_pinjam']?>
                                 </div>
                                 <div class="col-sm-2 col-md-2 col-lg-2">
-                                    caca
+                                <?php echo $row['nama_user']?>
                                 </div>
                                 <div class="col-sm-2 col-md-2 col-lg-2">
-                                    2
+                                  <?php echo $row['jumlah_peminjaman']?>
                                 </div>
                                 <div class="col-sm-3 col-md-3 col-lg-3">
-                                    10-06-2023
-                                </div>
-                                <div class="col-sm-3 col-md-3 col-lg-3">
-                                    17-06-2023
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card" style="border-color: black;">
-                          <div class="card-body">
-                            <div class="form-check">
-                              <div class="row">
-                                <div class="col-sm-2 col-md-2 col-lg-2">
-                                      2
-                                </div>
-                                <div class="col-sm-2 col-md-2 col-lg-2">
-                                    cong
-                                </div>
-                                <div class="col-sm-2 col-md-2 col-lg-2">
-                                    1
-                                </div>
-                                <div class="col-sm-3 col-md-3 col-lg-3">
-                                    17-06-2023
+                                <?php echo $row['tanggal_pinjam']?>
                                 </div>
                                 <div class="col-sm-3 col-md-3 col-lg-3">
                                   <form method="post" action="button_kembali.php">
