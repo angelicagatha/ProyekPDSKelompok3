@@ -41,13 +41,13 @@
 
         <style>
             .book-card {
-            width: 300px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            height: auto;
+                width: 300px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 20px;
+                margin: 10px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                height: auto;
             }
 
             .book-title {
@@ -86,40 +86,39 @@
             }
 
             .book-list {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 20px;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                grid-gap: 20px;
             }
 
             ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #333;
             }
 
             li {
-            float: left;
+                float: left;
             }
 
             li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
             }
 
             li a:hover:not(.active) {
-            background-color: #111;
+                background-color: #111;
             }
 
             .active {
-            background-color: #04AA6D;
+                background-color: #04AA6D;
             }
         </style>
-
         <title>View Cart</title>
     </head>
 
@@ -133,10 +132,10 @@
         ?>
 
         <ul>
-        <li><a href="homeuser.php">Home</a></li>
-        <li><a class="active" href="cart.php?idUser=<?php echo $id_user ?>">Cart</a></li>
-        <li><a href="logoutuser.php">Logout</a></li>
-        <li class="active" style="float:right"><a href="#">Welcome, <?php echo $_SESSION['nama_user'];?>!</a></li>
+            <li><a href="homeuser.php">Home</a></li>
+            <li><a class="active" href="cart.php?idUser=<?php echo $id_user ?>">Cart</a></li>
+            <li><a href="logoutuser.php">Logout</a></li>
+            <li class="active" style="float:right"><a href="#">Welcome, <?php echo $_SESSION['nama_user'];?>!</a></li>
         </ul>
 
         <br>
@@ -146,10 +145,10 @@
                 <div class="form-check">
                     <div class="row">
                         <div class="col-sm-5 col-md-5 col-lg-5">
-                            Product
+                            Buku
                         </div>
                         <div class="col-sm-3 col-md-3 col-lg-3">
-                            Quantity
+                            Jumlah
                         </div>
                     </div>
                 </div>
@@ -198,7 +197,7 @@
             <div class="card-footer">
                 <p>Total (<?php echo $totalBuku; ?> Jenis Buku):
                     <h5><?php echo $totalQuantity ?> Buku
-                        <button class="btn btn-info" onclick="location.href = '#'">Checkout</button>
+                        <button class="btn btn-info" onclick=checkout()>Checkout</button>
                     </h5>
                 </p>
             </div>
@@ -220,6 +219,16 @@
 
                 alert("Deleted from Cart SUCCESSFULY");
                 location.reload();
+            }
+
+            function checkout(){
+                <?php
+                    $delete = "DELETE FROM cart WHERE idUser = $id_user";
+                    $result = $conn->query($delete);
+                ?>
+                var url = "berhasilcheckout.php";
+                window.location.href = url;
+
             }
         </script>
     </body>
