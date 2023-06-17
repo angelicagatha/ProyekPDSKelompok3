@@ -109,116 +109,106 @@
     <h1 style="text-align: center;">List Buku Perpustakaan</h1>
     <?php include '../searchbook.php'; ?> 
 
-    <div class="book-container">
-      <h2 style="text-align: center;">Buku Terlaris</h2>
-      <?php
-        require_once "koneksi.php";
+    <?php
+      // buku terlaris
+      $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, kategori.nama_kategori, jumlah_peminjaman
+                FROM books
+                INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
+                INNER JOIN status ON status.id_status = books.status
+                ORDER BY jumlah_peminjaman DESC
+                LIMIT 5";
+      $result = $conn->query($query);
 
-        $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, idKategoriBuku, nama_kategori, jumlah_peminjaman
-                  FROM books
-                  INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
-                  INNER JOIN status ON status.id_status = books.status
-                  ORDER BY jumlah_peminjaman DESC
-                  LIMIT 5";
-        $result = $conn->query($query);
-
-        if ($result && $result->num_rows > 0) {
-          $rows = array();
-          while($row = $result->fetch_assoc()){
-            $rows[] = $row;
-          }
+      if ($result && $result->num_rows > 0) {
+        $rows = array();
+        while($row = $result->fetch_assoc()){
+          $rows[] = $row;
         }
-        
-          echo '<div class="book-list">';
-          for ($i = 0; $i < count($rows); $i++) {
-            $currentRow = $rows[$i];
-            echo '<div class="book-card">';
-            echo '<p>Kategori: ' . $currentRow['nama_kategori'] . '</p>';
-            echo '<img src="../img/' . $currentRow['file_name'] . '" alt="Cover Buku" class="book-cover">';
-            echo '<h3 class="book-title">' . $currentRow['nama_buku'] . '</h3>';
-            echo '<p class="book-author">' . $currentRow['penulis'] . '</p>';
+      }
 
-            if ($currentRow['status_buku'] == 1) {
-              echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
-              
-                echo '<div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $currentRow['id'] . ')">
-                          <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
-                        </a>
-                      </div>';
-            } else {
-              echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
-            }
-            echo '</div>';
+      echo '<div class="book-container">
+              <h2 style="text-align: center;">Buku Terlaris</h2>
+                <div class="book-list">';
+
+      for ($i = 0; $i < count($rows); $i++) {
+        $currentRow = $rows[$i];
+
+        echo '<div class="book-card">';
+        echo '<p>Kategori: ' . $currentRow['nama_kategori'] . '</p>';
+        echo '<img src="../img/' . $currentRow['file_name'] . '" alt="Cover Buku" class="book-cover">';
+        echo '<h3 class="book-title">' . $currentRow['nama_buku'] . '</h3>';
+        echo '<p class="book-author">' . $currentRow['penulis'] . '</p>';
+
+        if ($currentRow['status_buku'] == 1) {
+          echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>
+                  <div class="card-footer d-flex justify-content-between bg-light border">
+                    <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $currentRow['id'] . ')">
+                      <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
+                    </a>
+                  </div>';
+        } else {
+          echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
         }
-          echo '</div>';
-      ?>
-    </div>
-    
-    <div class="book-container">
-      <h2 style="text-align: center;">Buku yang Tersedia</h2>
-      <?php
-        require_once "koneksi.php";
+        echo '</div>';
+      }
+      echo '</div>';
 
-        $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status.keterangan_status, kategori.nama_kategori
-                  FROM books
-                  INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
-                  INNER JOIN status ON status.id_status = books.status_buku
-                  WHERE status_buku = '1'";
-        $result = $conn->query($query);
+      // buku yang tersedia
+      $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status_buku, kategori.nama_kategori, jumlah_peminjaman
+                FROM books
+                INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
+                INNER JOIN status ON status.id_status = books.status";
+      $result = $conn->query($query);
 
-        if ($result->num_rows > 0) {
-          $rows = array();
-          while($row = $result->fetch_assoc()){
-            $rows[] = $row;
-          }
+      if ($result && $result->num_rows > 0) {
+        $rows = array();
+        while($row = $result->fetch_assoc()){
+          $rows[] = $row;
         }
+      }
 
-          echo '<div class="book-list">';
-          for ($i = 0; $i < count($rows); $i++) {
-            $currentRow = $rows[$i];
-              echo '<div class="book-card">';
-                echo '<p>Kategori: ' . $currentRow['nama_kategori'] . '</p>';
-                echo '<img src="../img/' . $currentRow['file_name'] . '" alt="Cover Buku" class="book-cover">';
-                echo '<h3 class="book-title">' . $currentRow['nama_buku'] . '</h3>';
-                echo '<p class="book-author">' . $currentRow['penulis'] . '</p>';
-                echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
-                  echo '<div class="card-footer d-flex justify-content-between bg-light border">
-                          <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $currentRow['id'] . ')">
-                            <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
-                          </a>
-                        </div>';
-                echo '</div>';
-          }
-          echo '</div>';
-      ?>
-    </div>
+      echo '<div class="book-container">
+          <h2 style="text-align: center;">Buku yang Tersedia</h2>
+          <div class="book-list">';
 
-    <div class="book-container">
-      <h2 style="text-align: center;">Buku sedang Dipinjam</h2>
-      <?php
-        $query = "SELECT books.id, file_name, uploaded_on, status, nama_buku, deskripsi, penulis, tanggal_terbit, penerbit, status.keterangan_status, kategori.nama_kategori
-                  FROM books
-                  INNER JOIN kategori ON kategori.id_kategori = books.idKategoriBuku
-                  INNER JOIN status ON status.id_status = books.status_buku
-                  WHERE status_buku = '0'";
-        $result = $conn->query($query);
-
-        if ($result->num_rows > 0) {
-          echo '<div class="book-list">';
-          while ($row = $result->fetch_assoc()) {
-            echo '<div class="book-card">';
-              echo '<p>Kategori: ' . $row['nama_kategori'] . '</p>';
-              echo '<img src="../img/' . $row['file_name'] . '" alt="Cover Buku" class="book-cover">';
-              echo '<h3 style="text-align: center;">' . $row['nama_buku'] . '</h3>';
-              echo '<p style="text-align: center;">' . $row['penulis'] . '</p>';
-              echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
-              echo '</div>';
-          }
+      for ($i = 0; $i < count($rows); $i++) {
+        $currentRow = $rows[$i];
+        if ($currentRow['status_buku'] == 1) {
+          echo '<div class="book-card">';
+          echo '<p>Kategori: ' . $currentRow['nama_kategori'] . '</p>';
+          echo '<img src="../img/' . $currentRow['file_name'] . '" alt="Cover Buku" class="book-cover">';
+          echo '<h3 class="book-title">' . $currentRow['nama_buku'] . '</h3>';
+          echo '<p class="book-author">' . $currentRow['penulis'] . '</p>';
+          echo '<p class="book-status" style="text-align: right; color: green;">Status: [Tersedia]</p>';
+          echo '<div class="card-footer d-flex justify-content-between bg-light border">
+                  <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $currentRow['id'] . ')">
+                    <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
+                  </a>
+                </div>';
           echo '</div>';
         }
-      ?>
-    </div>
+      }
+      echo '</div>';
+
+      // buku sedang dipinjam
+      echo '<div class="book-container">
+              <h2 style="text-align: center;">Buku sedang Dipinjam</h2>
+                <div class="book-list">';
+
+      for ($i = 0; $i < count($rows); $i++) {
+        $currentRow = $rows[$i];
+        if ($currentRow['status_buku'] == 0) {
+          echo '<div class="book-card">';
+          echo '<p>Kategori: ' . $currentRow['nama_kategori'] . '</p>';
+          echo '<img src="../img/' . $currentRow['file_name'] . '" alt="Cover Buku" class="book-cover">';
+          echo '<h3 class="book-title">' . $currentRow['nama_buku'] . '</h3>';
+          echo '<p class="book-author">' . $currentRow['penulis'] . '</p>';
+          echo '<p class="book-status" style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
+          echo '</div>';
+        }
+      }
+      echo '</div>';
+    ?>
 
     <script>
         function addToCart(idBuku) {
@@ -231,6 +221,5 @@
             alert("Added to Cart SUCCESSFULY");
         }
       </script>
-
   </body>
 </html>

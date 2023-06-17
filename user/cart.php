@@ -144,12 +144,14 @@
             <div class="card-header">
                 <div class="form-check">
                     <div class="row">
-                        <div class="col-sm-5 col-md-5 col-lg-5">
-                            Buku
-                        </div>
-                        <div class="col-sm-3 col-md-3 col-lg-3">
-                            Jumlah
-                        </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
+                        Nomor
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
+                        Cover Buku
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
+                        Judul Buku
                     </div>
                 </div>
             </div>
@@ -157,8 +159,8 @@
 
         <!-- Card Per item nya -->
         <?php
+            $count = 1;
             $totalBuku = 0;
-            $totalQuantity = 0;
             foreach ($items as $punyaBuku) {
                 $sql2 = "SELECT * FROM books WHERE id=" . $punyaBuku['idBuku'];
                 $result2 = $conn->query($sql2);
@@ -170,20 +172,22 @@
                 <div class="card-body">
                     <div class="form-check">
                         <div class="row">
-                            <div class="col-sm-5 col-md-5 col-lg-5">
+                            <div class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
+                                <?php
+                                    echo $count;
+                                    $count += 1;
+                                ?>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
                                 <img src="../img/<?php echo $books['file_name'] ?>" style="width: 80px">
+                            </div>
+                            <div id="<?php $punyaBuku['idBuku'] ?>" class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
                                 <?php
                                     echo $books['nama_buku'];
                                     $totalBuku += 1
                                 ?>
                             </div>
-                            <div class="col-sm-3 col-md-3 col-lg-3">
-                                <?php
-                                    echo $punyaBuku['quantity'];
-                                    $totalQuantity += $punyaBuku['quantity'];
-                                ?>
-                            </div>
-                            <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div class="col-sm-3 col-md-3 col-lg-3"style="text-align: center;">
                                 <button class="btn btn-danger" onclick="deleteACart('<?php echo $punyaBuku['idBuku']; ?>')">Delete</button>
                             </div>
                         </div>
@@ -195,11 +199,8 @@
         <br>
         <div class="card" style="border-color: black; text-align: center;">
             <div class="card-footer">
-                <p>Total (<?php echo $totalBuku; ?> Jenis Buku):
-                    <h5><?php echo $totalQuantity ?> Buku
-                        <button class="btn btn-info" onclick=checkout()>Checkout</button>
-                    </h5>
-                </p>
+                <p>Total (<?php echo $totalBuku; ?> Jenis Buku)</p>
+                <button class="btn btn-info" onclick="checkout()">Checkout</button>
             </div>
         </div>
 
@@ -211,6 +212,13 @@
         <script src="js/bootstrap.js"></script>
 
         <script>
+            function checkout(){
+                var idUser = <?php echo $_SESSION['id_user']; ?>;
+                var url = "http://localhost/PDS/ProyekPDSKelompok3/ajax/prosesCheckout.php?idUser="+idUser;
+                
+                window.location.href = url;
+            }
+
             function deleteACart(idBuku) {
                 var idUser = <?php echo $_SESSION['id_user']; ?>;
                 var url = "http://localhost/PDS/ProyekPDSKelompok3/ajax/deleteFromCart.php?idUser=" + idUser + "&idBuku=" + idBuku;
@@ -219,16 +227,6 @@
 
                 alert("Deleted from Cart SUCCESSFULY");
                 location.reload();
-            }
-
-            function checkout(){
-                <?php
-                    $delete = "DELETE FROM cart WHERE idUser = $id_user";
-                    $result = $conn->query($delete);
-                ?>
-                var url = "berhasilcheckout.php";
-                window.location.href = url;
-
             }
         </script>
     </body>
