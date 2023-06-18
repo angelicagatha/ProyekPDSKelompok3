@@ -28,7 +28,7 @@ $redis = new Client([
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$database = 'library';
+$database = 'library'; // db caca
 
 // Buat koneksi
 $koneksi = mysqli_connect($host, $username, $password, $database);
@@ -106,8 +106,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     echo '<h3 style="text-align: center;">' . $book['nama_buku'] . '</h3>';
                     echo '<p style="text-align: center;">' . $book['penulis'] . '</p>';
 
-                    if ($book['status_buku'] == "Tersedia") {
+                    if ($book['status_buku'] == 1) {
                         echo '<p style="text-align: right; color: green;">Status: [Tersedia]</p>';
+                        echo '<div class="card-footer d-flex justify-content-between bg-light border">
+                                <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $book['id'] . ')">
+                                    <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
+                                </a>
+                                </div>';
+                        echo '</div>';
                     } else {
                         echo '<p style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
                     }    

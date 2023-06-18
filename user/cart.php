@@ -3,6 +3,32 @@
 
     // path nya caca
     require '../../../vendor/predis/predis/autoload.php';
+    use Predis\Client;
+
+    $redis_host = 'localhost';
+    $redis_port = 6379;
+    $redis_password = null;
+
+    $redis = new Client([
+        'scheme' => 'tcp',
+        'host' => $redis_host,
+        'port' => $redis_port,
+        'password' => $redis_password,
+    ]);
+
+    // Konfigurasi koneksi database
+    $host = 'localhost';
+    $username = 'root';
+    $password = '';
+    $database = 'library'; // db caca
+
+    // Buat koneksi
+    $koneksi = mysqli_connect($host, $username, $password, $database);
+
+    // Periksa koneksi
+    if (!$koneksi) {
+        die("Gagal terhubung ke database: " . mysqli_connect_error());
+    }
 
     Predis\Autoloader::register();
     
@@ -11,6 +37,8 @@
     if (!isset($_SESSION['id_user'])) {
         header("location: loginuser.php");
     }
+
+    $redis = new Predis\Client();
 
     $id_user = $_SESSION['id_user'];
     // $sql = "SELECT * FROM cart WHERE idUser=$id_user";
