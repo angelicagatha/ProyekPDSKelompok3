@@ -1,5 +1,10 @@
 <?php
     require_once "../user/koneksi.php";
+
+    // path nya caca
+    require '../../../vendor/predis/predis/autoload.php';
+
+    Predis\Autoloader::register();
     
     session_start();
 
@@ -8,9 +13,25 @@
     }
 
     $id_user = $_SESSION['id_user'];
-    $sql = "SELECT * FROM cart WHERE idUser=$id_user";
-    $result = $conn->query($sql);
-    $items = $result->fetch_all(MYSQLI_ASSOC);
+
+    $redis = new Predis\Client();
+    $cartKey = "cart:user:$id_user";
+
+    if ($redis->exists($cartKey)) {
+        $items = json_decode($redis->get($cartKey), true);
+    }  else {
+        $sql = "SELECT * FROM cart WHERE idUser=$id_user";
+        $result = $conn->query($sql);
+        $items = $result->fetch_all(MYSQLI_ASSOC);
+
+        $redis->set($cartKey, json_encode($items));
+    }
+
+    $redis->del($cartKey);
+    foreach ($items as $item) {
+        $bookId = $item['idBuku'];
+        $redis->hset($cartKey, $bookId, 1);
+    }
 ?>
 
 <html>
