@@ -1,23 +1,22 @@
 <?php
     require_once 'koneksi.php';
 
-    $tanggal_kembali = '';
+    $idPinjam = $_POST['idPinjam'];
+    $idBuku = $_POST['idBuku'];
+    $tanggal_kembali = date('Y-m-d');
 
-    if (isset($_POST['button_kembali'])){
-        $timestamp = date('Y-m-d');
+    $query = "UPDATE riwayat
+    SET tanggal_kembali = ?
+    WHERE id_pinjam = ?";
+    
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("si", $tanggal_kembali, $idPinjam);
+    $stmt->execute();
 
-        $query = "INSERT INTO riwayat (tanggal_kembali) VALUES (?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $timestamp);
-    }
-
-    $menampilkan = "SELECT tanggal_kembali FROM riwayat";
-    $result = $conn->query($menampilkan);
-
-    if($result->num_rows > 0){
-        $row = $result->fetch_assoc();
-        $tanggal_kembali = $row['tanggal_kembali'];
-    }
+    $query2 = "UPDATE books SET status_buku = 1 WHERE id = ?";
+    $stmt2 = $conn->prepare($query2);
+    $stmt2->bind_param("i", $idBuku);
+    $stmt2->execute();
 
     header("location: riwayat.php");
 ?>

@@ -160,7 +160,7 @@
                 INNER JOIN status ON status.id_status = books.status";
       $result = $conn->query($query);
 
-      if ($result && $result->num_rows > 0) {
+      if ($result && $result->num_rows > 0) { // melakukan pengecekan di database, ada isinya atau tidak
         $rows = array();
         while($row = $result->fetch_assoc()){
           $rows[] = $row;

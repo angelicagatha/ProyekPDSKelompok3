@@ -153,12 +153,11 @@
                 </div>
             </div>
         </div>
-
+       
         <?php
-            $sql2 = "SELECT * FROM books
-                      LEFT JOIN riwayat ON riwayat.id_buku_pinjam = books.id
-                      LEFT JOIN user ON user.id_user = riwayat.id_user_pinjam";
+            $sql2 = "SELECT * FROM books;";
             $result2 = $conn->query($sql2);
+
             while($row = $result2->fetch_assoc()) {
         ?>
 
@@ -188,14 +187,11 @@
                           <div class="card-header">
                             <div class="form-check">
                               <div class="row">
-                                <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
                                     Id User
                                 </div>
-                                <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
                                     Nama User
-                                </div>
-                                <div class="col-sm-2 col-md-2 col-lg-2">
-                                    Jumlah Pinjam
                                 </div>
                                 <div class="col-sm-3 col-md-3 col-lg-3">
                                     Tanggal Pinjam
@@ -207,34 +203,47 @@
                             </div>
                           </div>
                         </div>
-                        <!-- di looping dari riwayat -->
-                        <div class="card" style="border-color: black;">
-                          <div class="card-body">
-                            <div class="form-check">
-                              <div class="row">
-                                <div class="col-sm-2 col-md-2 col-lg-2">
-                                  <?php echo $row['id_user_pinjam']?>
-                                </div>
-                                <div class="col-sm-2 col-md-2 col-lg-2">
-                                <?php echo $row['nama_user']?>
-                                </div>
-                                <div class="col-sm-2 col-md-2 col-lg-2">
-                                  <?php echo $row['jumlah_peminjaman']?>
-                                </div>
-                                <div class="col-sm-3 col-md-3 col-lg-3">
-                                <?php echo $row['tanggal_pinjam']?>
-                                </div>
-                                <div class="col-sm-3 col-md-3 col-lg-3">
-                                  <form method="post" action="button_kembali.php">
-                                    <button type="submit" name="button_kembali" style="color: red;">Klik untuk Kembalikan</button>
-                                  </form>
+                        <?php
+                          $idBuku = $row['id'];
+                          $ambilRiwayatSesuaiBuku = "SELECT * from riwayat join user on user.id_user = riwayat.id_user_pinjam where id_buku_pinjam = ?";
+                          $hasilARSB = $conn->prepare($ambilRiwayatSesuaiBuku);
+                          $hasilARSB->bind_param("i", $idBuku);
+                          $hasilARSB->execute();
+                          $ARSB = $hasilARSB->get_result();
+                          while($row = $ARSB->fetch_assoc()) {
+                            echo '<div class="card" style="border-color: black;">
+                              <div class="card-body">
+                                <div class="form-check">
+                                  <div class="row">
+                                    <div class="col-sm-3 col-md-3 col-lg-3">';
+                                      echo $row['id_user_pinjam'];
+                                    echo '</div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3">';
+                                    echo $row['nama_user'];
+                                    echo '</div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3">';
+                                    echo $row['tanggal_pinjam'];
+                                    echo '</div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3">';
+                                    
+                                    if ($row['tanggal_kembali'] == '0000-00-00') {
+                                      echo '<form method="post" action="button_kembali.php">
+                                          <input type="hidden" name="idPinjam" value='.$row['id_pinjam'].'>
+                                          <input type="hidden" name="idBuku" value='.$row['id_buku_pinjam'].'>
+                                          <button type="submit" name="button_kembali" style="color: red;">Klik untuk Kembalikan</button>
+                                        </form>';
+                                    } else {
+                                      echo $row['tanggal_kembali'];
+                                    }
+                                    echo '</div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                        </div>
+                            </div>';
+                          }
+                        ?>
                       </p>
-                      <button onclick="closeModal(<?php echo $row['id'];?>)">Close</button>
+                      <button onclick="closeModal(<?php echo $idBuku ?>)">Close</button>
                   </div>
                 </div>
               </div>
@@ -250,6 +259,7 @@
           }
 
           function closeModal(id) {
+            console.log(id);
             document.getElementById(id).style.display = "none";
           }
       </script>
