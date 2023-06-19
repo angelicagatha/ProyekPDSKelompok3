@@ -6,10 +6,10 @@
 // }
 
 // path nya vira
-// require '../../../../vendor/Predis/Predis/Autoload.php';
+require '../../../../vendor/Predis/Predis/Autoload.php';
 
 // path nya caca
-require '../../../vendor/Predis/Predis/Autoload.php';
+// require '../../../vendor/Predis/Predis/Autoload.php';
 
 use Predis\Client;
 
@@ -28,7 +28,8 @@ $redis = new Client([
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$database = 'library'; // db caca
+// $database = 'library'; // db caca
+$database = 'perpustakaan'; //db vira
 
 // Buat koneksi
 $koneksi = mysqli_connect($host, $username, $password, $database);
@@ -71,6 +72,7 @@ function search_book($keyword)
 }
 
 $results = [];
+$keyword = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['keyword'])) {
@@ -97,32 +99,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <br>
 
     <?php
+    if (!empty($keyword)) {
         if ($results) {
             echo "<h3>Hasil pencarian untuk keyword '{$keyword}':</h3>";
             foreach ($results as $book) {
                 echo '<div class="book-card">';
-                    echo '<p>Kategori: ' . $book['nama_kategori'] . '</p>';
-                    echo '<img src="../img/' . $book['file_name'] . '" alt="Cover Buku" class="book-cover">';
-                    echo '<h3 style="text-align: center;">' . $book['nama_buku'] . '</h3>';
-                    echo '<p style="text-align: center;">' . $book['penulis'] . '</p>';
+                echo '<p>Kategori: ' . $book['nama_kategori'] . '</p>';
+                echo '<img src="../img/' . $book['file_name'] . '" alt="Cover Buku" class="book-cover">';
+                echo '<h3 style="text-align: center;">' . $book['nama_buku'] . '</h3>';
+                echo '<p style="text-align: center;">' . $book['penulis'] . '</p>';
 
-                    if ($book['status_buku'] == 1) {
-                        echo '<p style="text-align: right; color: green;">Status: [Tersedia]</p>';
-                        echo '<div class="card-footer d-flex justify-content-between bg-light border">
-                                <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $book['id'] . ')">
-                                    <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
-                                </a>
-                                </div>';
-                        echo '</div>';
-                    } else {
-                        echo '<p style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
-                    }    
+                if ($book['status_buku'] == 1) {
+                    echo '<p style="text-align: right; color: green;">Status: [Tersedia]</p>';
+                    echo '<div class="card-footer d-flex justify-content-between bg-light border">
+                            <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $book['id'] . ')">
+                                <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
+                            </a>
+                            </div>';
+                    echo '</div>';
+                } else {
+                    echo '<p style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
+                }
                 echo '</div>';
             }
         } else {
-            echo "<h3>Tidak ditemukan buku</h3>";
+            echo "<h3>Tidak ditemukan buku untuk keyword '{$keyword}'</h3>";
         }
+    }
     ?>
-            
-    </body>
+
+</body>
+
 </html>
