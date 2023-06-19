@@ -10,11 +10,11 @@
   $email_admin = $_SESSION['email_admin'];
   $id_admin = $_SESSION['id_admin'];
 
-  // $sql = "SELECT * FROM riwayat WHERE id_user_pinjam = ?";
-  // $stmt = $conn->prepare($sql);
-  // $stmt->bind_param("i", $idUser);
-  // $stmt->execute();
-  // $riwayat = $stmt->get_result();
+  $sql = "SELECT * FROM riwayat WHERE id_user_pinjam = ?";
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param("i", $idUser);
+  $stmt->execute();
+  $riwayat = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -129,10 +129,11 @@
     </head>
     <body>
         <ul>
-            <li><a href="homeadmin.php">Home</a></li>
-            <li><a class="active" href="riwayat.php">Riwayat</a></li>
-            <li><a href="logoutadmin.php">Logout</a></li>
-            <li class="active" style="float:right"><a href="#">Welcome, <?php echo $email_admin?>!</a></li>
+        <li><a class="" href="homeadmin.php">Buku</a></li>
+      <li><a class="active" href="riwayat.php">Riwayat</a></li>
+      <li><a class="" href="daftarUser.php">User</a></li>
+      <li><a href="logoutuser.php">Logout</a></li>
+      <li class="active" style="float:right"><a href="#">Welcome, <?php echo $email_admin?>!</a></li>
         </ul>
 
         <!-- Header -->
