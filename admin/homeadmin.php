@@ -116,8 +116,8 @@
 <ul>
 <body>
         <ul>
-            <li><a href="homeadmin.php">Home</a></li>
-            <li><a class="active" href="riwayat.php">Riwayat</a></li>
+            <li><a class="active" href="homeadmin.php">Home</a></li>
+            <li><a href="riwayat.php">Riwayat</a></li>
             <li><a href="logoutadmin.php">Logout</a></li>
         </ul>
 </ul>
@@ -127,7 +127,8 @@
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$database = 'perpustakaan';
+$database = 'perpustakaan'; // db regina, vira
+// $database = 'library'; // db caca
 
 // Buat koneksi
 $koneksi = mysqli_connect($host, $username, $password, $database);
