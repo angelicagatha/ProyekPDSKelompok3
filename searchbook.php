@@ -102,12 +102,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!empty($keyword)) {
         if ($results) {
             echo "<h3>Hasil pencarian untuk keyword '{$keyword}':</h3>";
+            echo '<div class="book-container">';
             foreach ($results as $book) {
                 echo '<div class="book-card">';
                 echo '<p>Kategori: ' . $book['nama_kategori'] . '</p>';
                 echo '<img src="../img/' . $book['file_name'] . '" alt="Cover Buku" class="book-cover">';
                 echo '<h3 style="text-align: center;">' . $book['nama_buku'] . '</h3>';
                 echo '<p style="text-align: center;">' . $book['penulis'] . '</p>';
+                echo '<p style="text-align: center;">Deskripsi: ' . $book['deskripsi'] . '</p>';
+                echo '<p style="text-align: center;">Tanggal Terbit: ' . $book['tanggal_terbit'] . '</p>';
+                echo '<p style="text-align: center;">Penerbit: ' . $book['penerbit'] . '</p>';
 
                 if ($book['status_buku'] == 1) {
                     echo '<p style="text-align: right; color: green;">Status: [Tersedia]</p>';
@@ -122,6 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 }
                 echo '</div>';
             }
+            echo '</div>';
         } else {
             echo "<h3>Tidak ditemukan buku untuk keyword '{$keyword}'</h3>";
         }
