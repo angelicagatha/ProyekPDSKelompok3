@@ -87,6 +87,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 <head>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        .book-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .book-card {
+            width: 300px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .book-card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .book-card h3 {
+            margin-bottom: 5px;
+        }
+
+        .book-card p {
+            margin-bottom: 5px;
+        }
+
+        .book-card .card-footer {
+            margin-top: 10px;
+            border-top: 1px solid #ccc;
+            padding-top: 5px;
+            text-align: right;
+        }
+    </style>
     <title>Pencarian Buku</title>
 </head>
 
@@ -106,23 +142,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             foreach ($results as $book) {
                 echo '<div class="book-card">';
                 echo '<p>Kategori: ' . $book['nama_kategori'] . '</p>';
-                echo '<img src="../img/' . $book['file_name'] . '" alt="Cover Buku" class="book-cover">';
-                echo '<h3 style="text-align: center;">' . $book['nama_buku'] . '</h3>';
-                echo '<p style="text-align: center;">' . $book['penulis'] . '</p>';
-                echo '<p style="text-align: center;">Deskripsi: ' . $book['deskripsi'] . '</p>';
-                echo '<p style="text-align: center;">Tanggal Terbit: ' . $book['tanggal_terbit'] . '</p>';
-                echo '<p style="text-align: center;">Penerbit: ' . $book['penerbit'] . '</p>';
+                echo '<img src="../img/' . $book['file_name'] . '" alt="Cover Buku">';
+                echo '<h3>' . $book['nama_buku'] . '</h3>';
+                echo '<p>' . $book['penulis'] . '</p>';
+                echo '<p>Deskripsi: ' . $book['deskripsi'] . '</p>';
+                echo '<p>Tanggal Terbit: ' . $book['tanggal_terbit'] . '</p>';
+                echo '<p>Penerbit: ' . $book['penerbit'] . '</p>';
 
                 if ($book['status_buku'] == 1) {
-                    echo '<p style="text-align: right; color: green;">Status: [Tersedia]</p>';
-                    echo '<div class="card-footer d-flex justify-content-between bg-light border">
+                    echo '<p style="color: green;">Status: [Tersedia]</p>';
+                    echo '<div class="card-footer">
                             <a href="" class="btn btn-sm text-dark p-0" onclick="addToCart(' . $book['id'] . ')">
                                 <i class="fas fa-shopping-cart text-primary mr-1"></i> Add To Cart
                             </a>
                             </div>';
-                    echo '</div>';
                 } else {
-                    echo '<p style="text-align: right; color: red;">Status: [Tidak Tersedia]</p>';
+                    echo '<p style="color: red;">Status: [Tidak Tersedia]</p>';
                 }
                 echo '</div>';
             }
