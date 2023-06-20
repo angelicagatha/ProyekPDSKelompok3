@@ -1,9 +1,16 @@
 <?php
     require_once "../user/koneksi.php";
+    session_start();
+    if (!isset($_SESSION['id_user'])) {
+        header("location: loginuser.php");
+    }
 
     // path nya caca
     require '../../../vendor/predis/predis/autoload.php';
     use Predis\Client;
+
+    $redis = new Predis\Client();
+    Predis\Autoloader::register();
 
     $redis_host = 'localhost';
     $redis_port = 6379;
@@ -30,33 +37,15 @@
         die("Gagal terhubung ke database: " . mysqli_connect_error());
     }
 
-    Predis\Autoloader::register();
-    
-    session_start();
-
-    if (!isset($_SESSION['id_user'])) {
-        header("location: loginuser.php");
-    }
-
-    $redis = new Predis\Client();
-
     $id_user = $_SESSION['id_user'];
-    // $sql = "SELECT * FROM cart WHERE idUser=$id_user";
-    // $result = $conn->query($sql);
-    // $items = $result->fetch_all(MYSQLI_ASSOC);
 
-    $redis = new Predis\Client();
     $cartKey = "cart:user:$id_user";
 
-    if ($redis->exists($cartKey)) {
-        $items = json_decode($redis->get($cartKey), true);
-    }  else {
-        $sql = "SELECT * FROM cart WHERE idUser=$id_user";
-        $result = $conn->query($sql);
-        $items = $result->fetch_all(MYSQLI_ASSOC);
+    $sql = "SELECT * FROM cart WHERE idUser=$id_user";
+    $result = $conn->query($sql);
+    $items = $result->fetch_all(MYSQLI_ASSOC);
 
-        $redis->set($cartKey, json_encode($items));
-    }
+    $redis->set($cartKey, json_encode($items));
 
     $redis->del($cartKey);
     foreach ($items as $item) {
@@ -233,7 +222,7 @@
                             <div class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
                                 <img src="../img/<?php echo $books['file_name'] ?>" style="width: 80px">
                             </div>
-                            <div id="<?php $punyaBuku['idBuku'] ?>" class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
+                            <div id="<?php echo $punyaBuku['idBuku'] ?>" class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
                                 <?php
                                     echo $books['nama_buku'];
                                     $totalBuku += 1

@@ -4,7 +4,7 @@ require_once("koneksi.php");
 
 if (isset($_POST['update'])) {
 	// Escape special characters in a string for use in an SQL statement
-    $targetDir = "uploads/";
+    $targetDir = "../img/";
 $fileName = basename($_FILES["file"]["name"]);
 $name = $_POST["name"];
 $desc = $_POST["desc"];
@@ -14,7 +14,7 @@ $tgl = $_POST["tanggal"];
 $kategori=$_POST["select_box"];
 $targetFilePath = $targetDir . $fileName;
 $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
-$id = $_POST['id'];
+// $id = $_POST['id'];
 	
 	// Check for empty fields
 	if(isset($_POST["update"]) && !empty($_FILES["file"]["name"] && !empty($_POST["name"])&& !empty($_POST["desc"]) && !empty($_POST["author"]) && !empty($_POST["publisher"])&& !empty($_POST["tanggal"]))){
@@ -29,7 +29,7 @@ $id = $_POST['id'];
                 echo $fileName;
                 if($update){
                     // $statusMsg = "The file ".$fileName. " has been uploaded successfully.";
-                    header("Location:homehomean.php");
+                    header("Location:homeadmin.php");
                 }else{
                     $statusMsg = "File upload failed, please try again.";
                 } 

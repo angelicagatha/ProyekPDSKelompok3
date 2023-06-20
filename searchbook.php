@@ -6,10 +6,10 @@
 // }
 
 // path nya vira
-require '../../../../vendor/Predis/Predis/Autoload.php';
+// require '../../../../vendor/Predis/Predis/Autoload.php';
 
 // path nya caca
-// require '../../../vendor/Predis/Predis/Autoload.php';
+require '../../../vendor/Predis/Predis/Autoload.php';
 
 use Predis\Client;
 
@@ -28,8 +28,8 @@ $redis = new Client([
 $host = 'localhost';
 $username = 'root';
 $password = '';
-// $database = 'library'; // db caca
-$database = 'perpustakaan'; //db vira
+$database = 'library'; // db caca
+// $database = 'perpustakaan'; //db vira
 
 // Buat koneksi
 $koneksi = mysqli_connect($host, $username, $password, $database);

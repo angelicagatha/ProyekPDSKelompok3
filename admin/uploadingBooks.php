@@ -4,7 +4,7 @@ include 'koneksi.php';
 $statusMsg = '';
 
 // File upload path
-$targetDir = "uploads/";
+$targetDir = "../img/";
 $fileName = basename($_FILES["file"]["name"]);
 $nama = $_POST["namaBuku"];
 $desc = $_POST["descBuku"];
@@ -27,7 +27,7 @@ if(isset($_POST["submit"]) && !empty($_FILES["file"]["name"] && !empty($_POST["n
             echo $fileName;
             if($insert){
                 // $statusMsg = "The file ".$fileName. " has been uploaded successfully.";
-                header("Location:homehomean.php");
+                header("Location:homeadmin.php");
             }else{
                 $statusMsg = "File upload failed, please try again.";
             } 

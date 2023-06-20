@@ -4,7 +4,7 @@ include 'connection.php';
 $statusMsg = '';
 
 // File upload path
-$targetDir = "uploads/";
+$targetDir = "../img/";
 $fileName = basename($_FILES["file"]["name"]);
 $nama = $_POST["namaBuku"];
 $desc = $_POST["descBuku"];

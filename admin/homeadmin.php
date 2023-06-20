@@ -1,4 +1,17 @@
 <!-- <a href="riwayat.php">RIWAYAT, KLIK DISINI</a> -->
+<?php
+  require_once 'koneksi.php';
+
+  session_start();
+
+  if(!isset($_SESSION['email_admin'])){
+
+    header("location: homeadmin.php");
+    exit;
+  }
+  $email_admin = $_SESSION['email_admin'];
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -115,11 +128,11 @@
 <body>
 <ul>
 <body>
-        <ul>
+      <ul>
         <li><a class="active" href="homeadmin.php">Buku</a></li>
       <li><a class="" href="riwayat.php">Riwayat</a></li>
       <li><a class="" href="daftarUser.php">User</a></li>
-      <li><a href="logoutuser.php">Logout</a></li>
+      <li><a href="logoutadmin.php">Logout</a></li>
       <li class="active" style="float:right"><a href="#">Welcome, <?php echo $email_admin?>!</a></li>
         </ul>
 </ul>
@@ -131,8 +144,8 @@
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$database = 'perpustakaan'; // db regina, vira
-// $database = 'library'; // db caca
+// $database = 'perpustakaan'; // db regina, vira
+$database = 'library'; // db caca
 
 // Buat koneksi
 $koneksi = mysqli_connect($host, $username, $password, $database);
@@ -141,7 +154,6 @@ $koneksi = mysqli_connect($host, $username, $password, $database);
 if (!$koneksi) {
     die("Gagal terhubung ke database: " . mysqli_connect_error());
 }
-session_start();
 
   if(!isset($_SESSION['email_admin'])){
     header("location: loginadmin.php");
@@ -151,7 +163,7 @@ session_start();
   $id_admin = $_SESSION['id_admin'];
 
   $sql = "SELECT * FROM riwayat WHERE id_user_pinjam = ?";
-  $stmt = $conn->prepare($sql);
+  $stmt = $koneksi->prepare($sql);
   $stmt->bind_param("i", $idUser);
   $stmt->execute();
   $riwayat = $stmt->get_result();
@@ -196,9 +208,9 @@ for ($i = 0; $i < count($rows); $i++) {
     }
     echo '<table><tr><td><form action="update.php" method="post">
                     
-                    <a href="update.php?id='.$row['id'].'" class="btn btn-primary" type="button">update</a>
+                    <a href="update.php?id='.$currentRow['id'].'" class="btn btn-primary" type="button">update</a>
                 </form><td>';
-                    echo '<td><a href="delete.php?id='.$row['id'].'" class="btn btn-primary" type="button" onClick="return confirm("Are you sure you want to delete?")">Delete</a></td></tr></table>';               
+                    echo '<td><a href="delete.php?id='.$currentRow['id'].'" class="btn btn-primary" type="button" onClick="return confirm("Are you sure you want to delete?")">Delete</a></td></tr></table>';               
     echo '</div>';
 }
 echo '</div>';

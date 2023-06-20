@@ -3,12 +3,12 @@
 
   session_start();
 
-  if(!isset($_SESSION['nama_user'])){
-    header("location: loginuser.php");
+  if(!isset($_SESSION['email_admin'])){
+    header("location: loginadmin.php");
     exit;
   }
 
-  $username = $_SESSION['nama_user'];
+  $email_admin = $_SESSION['email_admin'];
 ?>
 
 <!DOCTYPE html>
@@ -110,6 +110,44 @@ td, th {
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+
+<?php $query = "SELECT nama_user,id_user_pinjam,tanggal_pinjam, COUNT(*)
+      FROM riwayat r JOIN user u ON r.id_user_pinjam = u.id_user Group by id_user_pinjam order by count(*) desc";
+              $result = $conn->query($query);?>
+  <script>
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2", // "light1", "light2", "dark1", "dark2"
+	title: {
+		text: ""
+	},
+	axisY: {
+		title: "JUMLAH BUKU"
+	},
+	axisX: {
+		title: "NAMA USER "
+	},
+	data: [{
+		type: "column",
+		// yValueFormatString: "#,##0.0#\"%\"",
+		dataPoints: [
+      <?php $count = 0;
+        foreach ($result as $data) { 
+          if ($count!=0) {
+            echo ", ";
+          }
+			echo '{ label: "'.$data['nama_user'].'", y: '.$data['COUNT(*)'].' }';
+      $count++; 
+      } ?>	
+		]
+	}]
+});
+chart.render();
+}
+
+    </script>
   </head>
 
   <body>
@@ -130,7 +168,12 @@ td, th {
               $query = "SELECT id_user_pinjam,COUNT(*)
                         FROM riwayat Group by id_user_pinjam order by count(*) desc";
               $result = $conn->query($query);
-              echo '<table id="myTable"><th>Nama User</th><th>Email</th><th>Jumlah Pinjam</th><th>Detail Peminjaman</th>';
+              echo '<div id="chartContainer" style="height: 370px; width: 100%;"></div>';
+              echo '<table id="myTable">
+                    <th>Nama User</th>
+                    <th>Email</th>
+                    <th>Jumlah Pinjam</th>
+                    <th>Detail Peminjaman</th>';
               if ($result->num_rows>0) {
                 echo '<div class="user-list">';
                 while ($row = $result->fetch_assoc()) {
@@ -222,5 +265,8 @@ td, th {
             document.getElementById(id).style.display = "none";
           }
       </script>
+      
+      <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+
   </body>
 </html>
