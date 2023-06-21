@@ -48,8 +48,8 @@
             <form  action="updatingBooks.php" method="post" enctype="multipart/form-data">
             <table border="0">
                 <tr>
-                    <td><label for="id">ID Buku</label></td>
-                <td><input type="text" name="id" value=<?php echo $id; ?> disabled></td>
+                    <!-- <td><label for="id">ID Buku</label></td> -->
+                <td><input type="hidden" name="idBuku" value=<?php echo $id; ?>></td>
                 </tr>
 			<tr> 
 				<td>Cover Buku</td>
@@ -117,7 +117,7 @@
             <tr></tr>
             <tr></tr>
 			<tr>
-			<td><input type="submit" name="update" value="Update"></td>	
+			<td><input type="submit" class="btn btn-submit" name="update" value="Update"></td>	
 				
 			</tr>
 		</table>
